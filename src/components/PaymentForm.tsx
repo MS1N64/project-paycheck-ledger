@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -26,21 +25,47 @@ const PaymentForm = ({ onSubmit, onCancel, projectId }: PaymentFormProps) => {
     vat: "",
   });
 
+  const calculateVAT = (invoiceAmount: number) => {
+    return invoiceAmount * 0.20; // 20% VAT
+  };
+
+  const calculateInvoiceWithVAT = (invoiceAmount: number) => {
+    return invoiceAmount * 1.20; // Invoice + 20% VAT
+  };
+
+  const handleInvoiceChange = (value: string) => {
+    const invoiceAmount = parseFloat(value) || 0;
+    const vatAmount = calculateVAT(invoiceAmount);
+    
+    setFormData({
+      ...formData, 
+      invoice: value,
+      vat: vatAmount.toFixed(2)
+    });
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    const invoiceAmount = parseFloat(formData.invoice) || 0;
+    const invoiceWithVAT = calculateInvoiceWithVAT(invoiceAmount);
+    
     const payment = {
       id: Date.now().toString(),
       projectId,
       ...formData,
-      invoice: parseFloat(formData.invoice) || 0,
+      invoice: invoiceAmount,
+      invoiceWithVAT: invoiceWithVAT,
       transfer: parseFloat(formData.transfer) || 0,
       cash: parseFloat(formData.cash) || 0,
       vat: parseFloat(formData.vat) || 0,
-      total: (parseFloat(formData.invoice) || 0) + (parseFloat(formData.transfer) || 0) + (parseFloat(formData.cash) || 0),
+      total: invoiceWithVAT + (parseFloat(formData.transfer) || 0) + (parseFloat(formData.cash) || 0),
       createdAt: new Date().toISOString()
     };
     onSubmit(payment);
   };
+
+  const invoiceAmount = parseFloat(formData.invoice) || 0;
+  const invoiceWithVAT = calculateInvoiceWithVAT(invoiceAmount);
 
   return (
     <Card className="w-full max-w-md mx-auto">
@@ -85,17 +110,33 @@ const PaymentForm = ({ onSubmit, onCancel, projectId }: PaymentFormProps) => {
               </PopoverContent>
             </Popover>
           </div>
-          <div className="grid grid-cols-2 gap-3">
+          <div className="space-y-3">
             <div>
-              <Label htmlFor="invoice">Invoice (£)</Label>
+              <Label htmlFor="invoice">Invoice (£) - Excl. VAT</Label>
               <Input
                 id="invoice"
                 type="number"
                 step="0.01"
                 value={formData.invoice}
-                onChange={(e) => setFormData({...formData, invoice: e.target.value})}
+                onChange={(e) => handleInvoiceChange(e.target.value)}
                 placeholder="0.00"
               />
+              {invoiceAmount > 0 && (
+                <div className="mt-2 p-2 bg-gray-50 rounded text-sm">
+                  <div className="flex justify-between">
+                    <span>Invoice (Excl. VAT):</span>
+                    <span>£{invoiceAmount.toFixed(2)}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span>VAT (20%):</span>
+                    <span>£{calculateVAT(invoiceAmount).toFixed(2)}</span>
+                  </div>
+                  <div className="flex justify-between font-semibold border-t pt-1">
+                    <span>Invoice (Incl. VAT):</span>
+                    <span>£{invoiceWithVAT.toFixed(2)}</span>
+                  </div>
+                </div>
+              )}
             </div>
             <div>
               <Label htmlFor="transfer">Transfer (£)</Label>
@@ -109,29 +150,16 @@ const PaymentForm = ({ onSubmit, onCancel, projectId }: PaymentFormProps) => {
               />
             </div>
           </div>
-          <div className="grid grid-cols-2 gap-3">
-            <div>
-              <Label htmlFor="cash">Cash (£)</Label>
-              <Input
-                id="cash"
-                type="number"
-                step="0.01"
-                value={formData.cash}
-                onChange={(e) => setFormData({...formData, cash: e.target.value})}
-                placeholder="0.00"
-              />
-            </div>
-            <div>
-              <Label htmlFor="vat">VAT (£)</Label>
-              <Input
-                id="vat"
-                type="number"
-                step="0.01"
-                value={formData.vat}
-                onChange={(e) => setFormData({...formData, vat: e.target.value})}
-                placeholder="0.00"
-              />
-            </div>
+          <div>
+            <Label htmlFor="cash">Cash (£)</Label>
+            <Input
+              id="cash"
+              type="number"
+              step="0.01"
+              value={formData.cash}
+              onChange={(e) => setFormData({...formData, cash: e.target.value})}
+              placeholder="0.00"
+            />
           </div>
           <div className="flex gap-2 pt-4">
             <Button type="submit" className="flex-1">
