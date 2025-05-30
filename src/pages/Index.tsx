@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -6,19 +5,67 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Plus, Building, TrendingUp, DollarSign } from "lucide-react";
 import ProjectCard from "@/components/ProjectCard";
 import ProjectForm from "@/components/ProjectForm";
+import SearchFilter from "@/components/SearchFilter";
+import PaymentReminders from "@/components/PaymentReminders";
+import TaxReporting from "@/components/TaxReporting";
 import { useToast } from "@/hooks/use-toast";
 
 const Index = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
   const [projects, setProjects] = useState<any[]>([]);
+  const [filteredProjects, setFilteredProjects] = useState<any[]>([]);
   const [showProjectForm, setShowProjectForm] = useState(false);
   const [editingProject, setEditingProject] = useState<any>(null);
+  const [allPayments, setAllPayments] = useState<any[]>([]);
 
   useEffect(() => {
     const savedProjects = JSON.parse(localStorage.getItem("projects") || "[]");
+    const savedPayments = JSON.parse(localStorage.getItem("payments") || "[]");
     setProjects(savedProjects);
+    setFilteredProjects(savedProjects);
+    setAllPayments(savedPayments);
   }, []);
+
+  const handleFilterChange = (filters: any) => {
+    let filtered = [...projects];
+
+    // Search filter
+    if (filters.search) {
+      filtered = filtered.filter(project =>
+        project.address.toLowerCase().includes(filters.search.toLowerCase()) ||
+        project.clientName?.toLowerCase().includes(filters.search.toLowerCase())
+      );
+    }
+
+    // Status filter
+    if (filters.status && filters.status !== "all") {
+      filtered = filtered.filter(project => project.status === filters.status);
+    }
+
+    // Amount filters
+    if (filters.minAmount) {
+      filtered = filtered.filter(project => project.finalPrice >= parseFloat(filters.minAmount));
+    }
+    if (filters.maxAmount) {
+      filtered = filtered.filter(project => project.finalPrice <= parseFloat(filters.maxAmount));
+    }
+
+    // Date filters
+    if (filters.dateFrom || filters.dateTo) {
+      filtered = filtered.filter(project => {
+        const projectDate = new Date(project.createdAt);
+        const fromDate = filters.dateFrom ? new Date(filters.dateFrom) : null;
+        const toDate = filters.dateTo ? new Date(filters.dateTo) : null;
+        
+        if (fromDate && projectDate < fromDate) return false;
+        if (toDate && projectDate > toDate) return false;
+        return true;
+      });
+    }
+
+    setFilteredProjects(filtered);
+  };
 
   const handleCreateProject = (project: any) => {
     const updatedProjects = editingProject 
@@ -26,6 +73,7 @@ const Index = () => {
       : [...projects, project];
     
     setProjects(updatedProjects);
+    setFilteredProjects(updatedProjects);
     localStorage.setItem("projects", JSON.stringify(updatedProjects));
     setShowProjectForm(false);
     setEditingProject(null);
@@ -47,12 +95,14 @@ const Index = () => {
   const handleDeleteProject = (id: string) => {
     const updatedProjects = projects.filter(p => p.id !== id);
     setProjects(updatedProjects);
+    setFilteredProjects(updatedProjects);
     localStorage.setItem("projects", JSON.stringify(updatedProjects));
     
     // Also remove related payments
     const payments = JSON.parse(localStorage.getItem("payments") || "[]");
     const updatedPayments = payments.filter((p: any) => p.projectId !== id);
     localStorage.setItem("payments", JSON.stringify(updatedPayments));
+    setAllPayments(updatedPayments);
     
     toast({
       title: "Project Deleted",
@@ -134,6 +184,21 @@ const Index = () => {
           </Card>
         </div>
 
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+          <div className="lg:col-span-2">
+            <SearchFilter onFilterChange={handleFilterChange} />
+          </div>
+          <div>
+            <PaymentReminders projects={projects} />
+          </div>
+        </div>
+
+        {allPayments.length > 0 && (
+          <div className="mb-8">
+            <TaxReporting payments={allPayments} />
+          </div>
+        )}
+
         {showProjectForm && (
           <div className="mb-8">
             <ProjectForm
@@ -147,21 +212,30 @@ const Index = () => {
           </div>
         )}
 
-        {projects.length === 0 ? (
+        {filteredProjects.length === 0 ? (
           <Card className="border-slate-200">
             <CardContent className="text-center py-12">
               <Building className="h-16 w-16 text-slate-300 mx-auto mb-4" />
-              <h3 className="text-xl font-semibold text-slate-800 mb-2">No projects yet</h3>
-              <p className="text-slate-600 mb-6">Get started by creating your first property project</p>
-              <Button onClick={() => setShowProjectForm(true)} className="bg-slate-800 hover:bg-slate-700">
-                <Plus className="h-4 w-4 mr-2" />
-                Create Your First Project
-              </Button>
+              <h3 className="text-xl font-semibold text-slate-800 mb-2">
+                {projects.length === 0 ? "No projects yet" : "No projects match your filters"}
+              </h3>
+              <p className="text-slate-600 mb-6">
+                {projects.length === 0 
+                  ? "Get started by creating your first property project"
+                  : "Try adjusting your search criteria"
+                }
+              </p>
+              {projects.length === 0 && (
+                <Button onClick={() => setShowProjectForm(true)} className="bg-slate-800 hover:bg-slate-700">
+                  <Plus className="h-4 w-4 mr-2" />
+                  Create Your First Project
+                </Button>
+              )}
             </CardContent>
           </Card>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {projects.map((project) => (
+            {filteredProjects.map((project) => (
               <ProjectCard
                 key={project.id}
                 project={project}

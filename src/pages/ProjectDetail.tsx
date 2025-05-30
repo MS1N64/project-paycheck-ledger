@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -6,6 +5,9 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ArrowLeft, Plus, Download } from "lucide-react";
 import PaymentForm from "@/components/PaymentForm";
 import PaymentTable from "@/components/PaymentTable";
+import ProjectTimeline from "@/components/ProjectTimeline";
+import DocumentManager from "@/components/DocumentManager";
+import InvoiceGenerator from "@/components/InvoiceGenerator";
 import { useToast } from "@/hooks/use-toast";
 
 const ProjectDetail = () => {
@@ -108,10 +110,44 @@ const ProjectDetail = () => {
     
     const blob = new Blob([csvContent], { type: "text/csv" });
     const url = window.URL.createObjectURL(blob);
-    const a = document.createElement("a");
+    const a = document.createElement('a');
     a.href = url;
     a.download = `${project?.address.replace(/[^a-zA-Z0-9]/g, "_")}_payments.csv`;
     a.click();
+  };
+
+  const generateTimeline = () => {
+    const milestones = [
+      {
+        id: "project-start",
+        stage: "Project Started",
+        description: "Project initiated and planning begun",
+        status: "completed" as const,
+        date: new Date(project?.createdAt).toLocaleDateString()
+      }
+    ];
+
+    payments.forEach((payment, index) => {
+      milestones.push({
+        id: payment.id,
+        stage: payment.stage,
+        description: `Payment received: £${payment.total.toLocaleString()}`,
+        status: "completed" as const,
+        date: new Date(payment.date).toLocaleDateString(),
+        amount: payment.total
+      });
+    });
+
+    if (project?.totalRemaining > 0) {
+      milestones.push({
+        id: "final-payment",
+        stage: "Final Payment",
+        description: `Remaining amount: £${project.totalRemaining.toLocaleString()}`,
+        status: project.status === "Completed" ? "completed" as const : "pending" as const
+      });
+    }
+
+    return milestones;
   };
 
   if (!project) {
@@ -124,6 +160,13 @@ const ProjectDetail = () => {
       </div>
     );
   }
+
+  const clientInfo = {
+    name: project.clientName,
+    email: project.clientEmail,
+    phone: project.clientPhone,
+    address: project.clientAddress
+  };
 
   return (
     <div className="min-h-screen bg-slate-50">
@@ -147,7 +190,7 @@ const ProjectDetail = () => {
               <CardTitle className="text-sm text-slate-600">Final Price</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-2xl font-bold text-slate-800">£{project.finalPrice.toLocaleString()}</p>
+              <p className="text-2xl font-bold text-slate-800">{project.currency === 'USD' ? '$' : project.currency === 'EUR' ? '€' : '£'}{project.finalPrice.toLocaleString()}</p>
             </CardContent>
           </Card>
           <Card className="border-slate-200">
@@ -155,7 +198,7 @@ const ProjectDetail = () => {
               <CardTitle className="text-sm text-slate-600">Total Received</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-2xl font-bold text-emerald-600">£{project.totalReceived.toLocaleString()}</p>
+              <p className="text-2xl font-bold text-emerald-600">{project.currency === 'USD' ? '$' : project.currency === 'EUR' ? '€' : '£'}{project.totalReceived.toLocaleString()}</p>
             </CardContent>
           </Card>
           <Card className="border-slate-200">
@@ -163,7 +206,7 @@ const ProjectDetail = () => {
               <CardTitle className="text-sm text-slate-600">Remaining</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-2xl font-bold text-amber-600">£{project.totalRemaining.toLocaleString()}</p>
+              <p className="text-2xl font-bold text-amber-600">{project.currency === 'USD' ? '$' : project.currency === 'EUR' ? '€' : '£'}{project.totalRemaining.toLocaleString()}</p>
             </CardContent>
           </Card>
           <Card className="border-slate-200">
@@ -176,6 +219,20 @@ const ProjectDetail = () => {
               </p>
             </CardContent>
           </Card>
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+          <div className="lg:col-span-2">
+            <ProjectTimeline projectId={project.id} milestones={generateTimeline()} />
+          </div>
+          <div className="space-y-6">
+            <InvoiceGenerator 
+              projectId={project.id}
+              projectAddress={project.address}
+              clientInfo={clientInfo}
+            />
+            <DocumentManager projectId={project.id} />
+          </div>
         </div>
 
         <div className="flex gap-4 mb-6">

@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
 
 interface ProjectFormProps {
   onSubmit: (project: any) => void;
@@ -17,7 +18,13 @@ const ProjectForm = ({ onSubmit, onCancel, initialData }: ProjectFormProps) => {
     address: initialData?.address || "",
     finalPrice: initialData?.finalPrice || "",
     vatRate: initialData?.vatRate || "20",
-    status: initialData?.status || "Pending"
+    status: initialData?.status || "Pending",
+    currency: initialData?.currency || "GBP",
+    clientName: initialData?.clientName || "",
+    clientEmail: initialData?.clientEmail || "",
+    clientPhone: initialData?.clientPhone || "",
+    clientAddress: initialData?.clientAddress || "",
+    notes: initialData?.notes || ""
   });
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -35,65 +42,143 @@ const ProjectForm = ({ onSubmit, onCancel, initialData }: ProjectFormProps) => {
   };
 
   return (
-    <Card className="w-full max-w-md mx-auto">
+    <Card className="w-full max-w-2xl mx-auto border-slate-200">
       <CardHeader>
-        <CardTitle>{initialData ? "Edit Project" : "New Project"}</CardTitle>
+        <CardTitle className="text-slate-800">{initialData ? "Edit Project" : "New Project"}</CardTitle>
       </CardHeader>
       <CardContent>
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="md:col-span-2">
+              <Label htmlFor="address" className="text-slate-700">Property Address</Label>
+              <Input
+                id="address"
+                value={formData.address}
+                onChange={(e) => setFormData({...formData, address: e.target.value})}
+                placeholder="e.g., 43 Higher Swan Lane, BL3 3AJ"
+                required
+                className="border-slate-300 focus:border-slate-500"
+              />
+            </div>
+            
+            <div>
+              <Label htmlFor="finalPrice" className="text-slate-700">Final Price</Label>
+              <div className="flex gap-2">
+                <Select value={formData.currency} onValueChange={(value) => setFormData({...formData, currency: value})}>
+                  <SelectTrigger className="w-20 border-slate-300">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="GBP">£</SelectItem>
+                    <SelectItem value="USD">$</SelectItem>
+                    <SelectItem value="EUR">€</SelectItem>
+                  </SelectContent>
+                </Select>
+                <Input
+                  id="finalPrice"
+                  type="number"
+                  step="0.01"
+                  value={formData.finalPrice}
+                  onChange={(e) => setFormData({...formData, finalPrice: e.target.value})}
+                  placeholder="134400.00"
+                  required
+                  className="flex-1 border-slate-300 focus:border-slate-500"
+                />
+              </div>
+            </div>
+            
+            <div>
+              <Label htmlFor="vatRate" className="text-slate-700">VAT Rate (%)</Label>
+              <Select value={formData.vatRate} onValueChange={(value) => setFormData({...formData, vatRate: value})}>
+                <SelectTrigger className="border-slate-300">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="0">0%</SelectItem>
+                  <SelectItem value="5">5%</SelectItem>
+                  <SelectItem value="20">20%</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            
+            <div>
+              <Label htmlFor="status" className="text-slate-700">Status</Label>
+              <Select value={formData.status} onValueChange={(value) => setFormData({...formData, status: value})}>
+                <SelectTrigger className="border-slate-300">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="Pending">Pending</SelectItem>
+                  <SelectItem value="In Progress">In Progress</SelectItem>
+                  <SelectItem value="Completed">Completed</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+          
+          <div className="space-y-4">
+            <h3 className="text-lg font-semibold text-slate-800">Client Information</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <Label htmlFor="clientName" className="text-slate-700">Client Name</Label>
+                <Input
+                  id="clientName"
+                  value={formData.clientName}
+                  onChange={(e) => setFormData({...formData, clientName: e.target.value})}
+                  placeholder="John Smith"
+                  className="border-slate-300 focus:border-slate-500"
+                />
+              </div>
+              <div>
+                <Label htmlFor="clientEmail" className="text-slate-700">Client Email</Label>
+                <Input
+                  id="clientEmail"
+                  type="email"
+                  value={formData.clientEmail}
+                  onChange={(e) => setFormData({...formData, clientEmail: e.target.value})}
+                  placeholder="john@example.com"
+                  className="border-slate-300 focus:border-slate-500"
+                />
+              </div>
+              <div>
+                <Label htmlFor="clientPhone" className="text-slate-700">Client Phone</Label>
+                <Input
+                  id="clientPhone"
+                  value={formData.clientPhone}
+                  onChange={(e) => setFormData({...formData, clientPhone: e.target.value})}
+                  placeholder="07123 456789"
+                  className="border-slate-300 focus:border-slate-500"
+                />
+              </div>
+              <div>
+                <Label htmlFor="clientAddress" className="text-slate-700">Client Address</Label>
+                <Input
+                  id="clientAddress"
+                  value={formData.clientAddress}
+                  onChange={(e) => setFormData({...formData, clientAddress: e.target.value})}
+                  placeholder="Client address"
+                  className="border-slate-300 focus:border-slate-500"
+                />
+              </div>
+            </div>
+          </div>
+          
           <div>
-            <Label htmlFor="address">Property Address</Label>
-            <Input
-              id="address"
-              value={formData.address}
-              onChange={(e) => setFormData({...formData, address: e.target.value})}
-              placeholder="e.g., 43 Higher Swan Lane, BL3 3AJ"
-              required
+            <Label htmlFor="notes" className="text-slate-700">Project Notes</Label>
+            <Textarea
+              id="notes"
+              value={formData.notes}
+              onChange={(e) => setFormData({...formData, notes: e.target.value})}
+              placeholder="Additional project details, special requirements, etc."
+              className="border-slate-300 focus:border-slate-500"
             />
           </div>
-          <div>
-            <Label htmlFor="finalPrice">Final Price (£)</Label>
-            <Input
-              id="finalPrice"
-              type="number"
-              step="0.01"
-              value={formData.finalPrice}
-              onChange={(e) => setFormData({...formData, finalPrice: e.target.value})}
-              placeholder="134400.00"
-              required
-            />
-          </div>
-          <div>
-            <Label htmlFor="vatRate">VAT Rate (%)</Label>
-            <Select value={formData.vatRate} onValueChange={(value) => setFormData({...formData, vatRate: value})}>
-              <SelectTrigger>
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="0">0%</SelectItem>
-                <SelectItem value="5">5%</SelectItem>
-                <SelectItem value="20">20%</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-          <div>
-            <Label htmlFor="status">Status</Label>
-            <Select value={formData.status} onValueChange={(value) => setFormData({...formData, status: value})}>
-              <SelectTrigger>
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="Pending">Pending</SelectItem>
-                <SelectItem value="In Progress">In Progress</SelectItem>
-                <SelectItem value="Completed">Completed</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
+          
           <div className="flex gap-2 pt-4">
-            <Button type="submit" className="flex-1">
+            <Button type="submit" className="flex-1 bg-slate-800 hover:bg-slate-700">
               {initialData ? "Update" : "Create"} Project
             </Button>
-            <Button type="button" variant="outline" onClick={onCancel}>
+            <Button type="button" variant="outline" onClick={onCancel} className="border-slate-300 text-slate-700 hover:bg-slate-100">
               Cancel
             </Button>
           </div>
