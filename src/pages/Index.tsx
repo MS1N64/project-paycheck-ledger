@@ -69,60 +69,67 @@ const Index = () => {
   const activeProjects = projects.filter(p => p.status !== "Completed").length;
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-slate-50">
       <div className="container mx-auto px-4 py-8">
         <div className="flex justify-between items-center mb-8">
-          <div>
-            <h1 className="text-4xl font-bold text-gray-900 mb-2">Project Payment Tracker</h1>
-            <p className="text-gray-600">Manage and track payments for all your property projects</p>
+          <div className="flex items-center gap-6">
+            <img 
+              src="/lovable-uploads/7d3f7b33-caa8-4493-8e10-edf7a631b0e2.png" 
+              alt="DASS & SONS" 
+              className="h-16 w-auto"
+            />
+            <div>
+              <h1 className="text-4xl font-bold text-slate-800 mb-2">Project Payment Tracker</h1>
+              <p className="text-slate-600">Manage and track payments for all your property projects</p>
+            </div>
           </div>
-          <Button onClick={() => setShowProjectForm(true)} size="lg">
+          <Button onClick={() => setShowProjectForm(true)} size="lg" className="bg-slate-800 hover:bg-slate-700">
             <Plus className="h-5 w-5 mr-2" />
             New Project
           </Button>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-          <Card>
+          <Card className="border-slate-200">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium text-gray-600">Total Projects</CardTitle>
-              <Building className="h-4 w-4 text-gray-400" />
+              <CardTitle className="text-sm font-medium text-slate-600">Total Projects</CardTitle>
+              <Building className="h-4 w-4 text-slate-400" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">{projects.length}</div>
-              <p className="text-xs text-gray-500">{activeProjects} active</p>
+              <div className="text-2xl font-bold text-slate-800">{projects.length}</div>
+              <p className="text-xs text-slate-500">{activeProjects} active</p>
             </CardContent>
           </Card>
-          <Card>
+          <Card className="border-slate-200">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium text-gray-600">Total Value</CardTitle>
-              <DollarSign className="h-4 w-4 text-gray-400" />
+              <CardTitle className="text-sm font-medium text-slate-600">Total Value</CardTitle>
+              <DollarSign className="h-4 w-4 text-slate-400" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">£{totalValue.toLocaleString()}</div>
-              <p className="text-xs text-gray-500">Across all projects</p>
+              <div className="text-2xl font-bold text-slate-800">£{totalValue.toLocaleString()}</div>
+              <p className="text-xs text-slate-500">Across all projects</p>
             </CardContent>
           </Card>
-          <Card>
+          <Card className="border-slate-200">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium text-gray-600">Total Received</CardTitle>
-              <TrendingUp className="h-4 w-4 text-gray-400" />
+              <CardTitle className="text-sm font-medium text-slate-600">Total Received</CardTitle>
+              <TrendingUp className="h-4 w-4 text-slate-400" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold text-green-600">£{totalReceived.toLocaleString()}</div>
-              <p className="text-xs text-gray-500">
+              <div className="text-2xl font-bold text-emerald-600">£{totalReceived.toLocaleString()}</div>
+              <p className="text-xs text-slate-500">
                 {totalValue > 0 ? Math.round((totalReceived / totalValue) * 100) : 0}% of total
               </p>
             </CardContent>
           </Card>
-          <Card>
+          <Card className="border-slate-200">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium text-gray-600">Outstanding</CardTitle>
-              <DollarSign className="h-4 w-4 text-gray-400" />
+              <CardTitle className="text-sm font-medium text-slate-600">Outstanding</CardTitle>
+              <DollarSign className="h-4 w-4 text-slate-400" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold text-orange-600">£{(totalValue - totalReceived).toLocaleString()}</div>
-              <p className="text-xs text-gray-500">Remaining to collect</p>
+              <div className="text-2xl font-bold text-amber-600">£{(totalValue - totalReceived).toLocaleString()}</div>
+              <p className="text-xs text-slate-500">Remaining to collect</p>
             </CardContent>
           </Card>
         </div>
@@ -141,12 +148,12 @@ const Index = () => {
         )}
 
         {projects.length === 0 ? (
-          <Card>
+          <Card className="border-slate-200">
             <CardContent className="text-center py-12">
-              <Building className="h-16 w-16 text-gray-300 mx-auto mb-4" />
-              <h3 className="text-xl font-semibold text-gray-900 mb-2">No projects yet</h3>
-              <p className="text-gray-600 mb-6">Get started by creating your first property project</p>
-              <Button onClick={() => setShowProjectForm(true)}>
+              <Building className="h-16 w-16 text-slate-300 mx-auto mb-4" />
+              <h3 className="text-xl font-semibold text-slate-800 mb-2">No projects yet</h3>
+              <p className="text-slate-600 mb-6">Get started by creating your first property project</p>
+              <Button onClick={() => setShowProjectForm(true)} className="bg-slate-800 hover:bg-slate-700">
                 <Plus className="h-4 w-4 mr-2" />
                 Create Your First Project
               </Button>

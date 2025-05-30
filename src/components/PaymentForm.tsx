@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -68,30 +69,31 @@ const PaymentForm = ({ onSubmit, onCancel, projectId }: PaymentFormProps) => {
   const invoiceWithVAT = calculateInvoiceWithVAT(invoiceAmount);
 
   return (
-    <Card className="w-full max-w-md mx-auto">
+    <Card className="w-full max-w-md mx-auto border-slate-200">
       <CardHeader>
-        <CardTitle>Add Payment</CardTitle>
+        <CardTitle className="text-slate-800">Add Payment</CardTitle>
       </CardHeader>
       <CardContent>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <Label htmlFor="stage">Payment Stage</Label>
+            <Label htmlFor="stage" className="text-slate-700">Payment Stage</Label>
             <Input
               id="stage"
               value={formData.stage}
               onChange={(e) => setFormData({...formData, stage: e.target.value})}
               placeholder="e.g., STAGE 1 PAYMENTS"
               required
+              className="border-slate-300 focus:border-slate-500"
             />
           </div>
           <div>
-            <Label>Payment Date</Label>
+            <Label className="text-slate-700">Payment Date</Label>
             <Popover>
               <PopoverTrigger asChild>
                 <Button
                   variant="outline"
                   className={cn(
-                    "w-full justify-start text-left font-normal",
+                    "w-full justify-start text-left font-normal border-slate-300",
                     !formData.date && "text-muted-foreground"
                   )}
                 >
@@ -112,7 +114,7 @@ const PaymentForm = ({ onSubmit, onCancel, projectId }: PaymentFormProps) => {
           </div>
           <div className="space-y-3">
             <div>
-              <Label htmlFor="invoice">Invoice (£) - Excl. VAT</Label>
+              <Label htmlFor="invoice" className="text-slate-700">Invoice (£) - Excl. VAT</Label>
               <Input
                 id="invoice"
                 type="number"
@@ -120,9 +122,10 @@ const PaymentForm = ({ onSubmit, onCancel, projectId }: PaymentFormProps) => {
                 value={formData.invoice}
                 onChange={(e) => handleInvoiceChange(e.target.value)}
                 placeholder="0.00"
+                className="border-slate-300 focus:border-slate-500"
               />
               {invoiceAmount > 0 && (
-                <div className="mt-2 p-2 bg-gray-50 rounded text-sm">
+                <div className="mt-2 p-2 bg-slate-50 rounded text-sm border border-slate-200">
                   <div className="flex justify-between">
                     <span>Invoice (Excl. VAT):</span>
                     <span>£{invoiceAmount.toFixed(2)}</span>
@@ -139,7 +142,7 @@ const PaymentForm = ({ onSubmit, onCancel, projectId }: PaymentFormProps) => {
               )}
             </div>
             <div>
-              <Label htmlFor="transfer">Transfer (£)</Label>
+              <Label htmlFor="transfer" className="text-slate-700">Transfer (£)</Label>
               <Input
                 id="transfer"
                 type="number"
@@ -147,11 +150,12 @@ const PaymentForm = ({ onSubmit, onCancel, projectId }: PaymentFormProps) => {
                 value={formData.transfer}
                 onChange={(e) => setFormData({...formData, transfer: e.target.value})}
                 placeholder="0.00"
+                className="border-slate-300 focus:border-slate-500"
               />
             </div>
           </div>
           <div>
-            <Label htmlFor="cash">Cash (£)</Label>
+            <Label htmlFor="cash" className="text-slate-700">Cash (£)</Label>
             <Input
               id="cash"
               type="number"
@@ -159,13 +163,14 @@ const PaymentForm = ({ onSubmit, onCancel, projectId }: PaymentFormProps) => {
               value={formData.cash}
               onChange={(e) => setFormData({...formData, cash: e.target.value})}
               placeholder="0.00"
+              className="border-slate-300 focus:border-slate-500"
             />
           </div>
           <div className="flex gap-2 pt-4">
-            <Button type="submit" className="flex-1">
+            <Button type="submit" className="flex-1 bg-slate-800 hover:bg-slate-700">
               Add Payment
             </Button>
-            <Button type="button" variant="outline" onClick={onCancel}>
+            <Button type="button" variant="outline" onClick={onCancel} className="border-slate-300 text-slate-700 hover:bg-slate-100">
               Cancel
             </Button>
           </div>

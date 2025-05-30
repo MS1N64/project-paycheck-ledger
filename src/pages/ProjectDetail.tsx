@@ -116,57 +116,62 @@ const ProjectDetail = () => {
 
   if (!project) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-slate-50 flex items-center justify-center">
         <div className="text-center">
-          <h2 className="text-2xl font-bold text-gray-900 mb-4">Project not found</h2>
-          <Button onClick={() => navigate("/")}>Return to Dashboard</Button>
+          <h2 className="text-2xl font-bold text-slate-800 mb-4">Project not found</h2>
+          <Button onClick={() => navigate("/")} className="bg-slate-800 hover:bg-slate-700">Return to Dashboard</Button>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-slate-50">
       <div className="container mx-auto px-4 py-8">
         <div className="flex items-center gap-4 mb-6">
-          <Button variant="outline" onClick={() => navigate("/")}>
+          <img 
+            src="/lovable-uploads/7d3f7b33-caa8-4493-8e10-edf7a631b0e2.png" 
+            alt="DASS & SONS" 
+            className="h-12 w-auto"
+          />
+          <Button variant="outline" onClick={() => navigate("/")} className="border-slate-300 text-slate-700 hover:bg-slate-100">
             <ArrowLeft className="h-4 w-4 mr-2" />
             Back to Dashboard
           </Button>
-          <h1 className="text-3xl font-bold text-gray-900">{project.address}</h1>
+          <h1 className="text-3xl font-bold text-slate-800">{project.address}</h1>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-          <Card>
+          <Card className="border-slate-200">
             <CardHeader className="pb-3">
-              <CardTitle className="text-sm text-gray-600">Final Price</CardTitle>
+              <CardTitle className="text-sm text-slate-600">Final Price</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-2xl font-bold text-gray-900">£{project.finalPrice.toLocaleString()}</p>
+              <p className="text-2xl font-bold text-slate-800">£{project.finalPrice.toLocaleString()}</p>
             </CardContent>
           </Card>
-          <Card>
+          <Card className="border-slate-200">
             <CardHeader className="pb-3">
-              <CardTitle className="text-sm text-gray-600">Total Received</CardTitle>
+              <CardTitle className="text-sm text-slate-600">Total Received</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-2xl font-bold text-green-600">£{project.totalReceived.toLocaleString()}</p>
+              <p className="text-2xl font-bold text-emerald-600">£{project.totalReceived.toLocaleString()}</p>
             </CardContent>
           </Card>
-          <Card>
+          <Card className="border-slate-200">
             <CardHeader className="pb-3">
-              <CardTitle className="text-sm text-gray-600">Remaining</CardTitle>
+              <CardTitle className="text-sm text-slate-600">Remaining</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-2xl font-bold text-orange-600">£{project.totalRemaining.toLocaleString()}</p>
+              <p className="text-2xl font-bold text-amber-600">£{project.totalRemaining.toLocaleString()}</p>
             </CardContent>
           </Card>
-          <Card>
+          <Card className="border-slate-200">
             <CardHeader className="pb-3">
-              <CardTitle className="text-sm text-gray-600">Progress</CardTitle>
+              <CardTitle className="text-sm text-slate-600">Progress</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-2xl font-bold text-blue-600">
+              <p className="text-2xl font-bold text-slate-700">
                 {project.finalPrice > 0 ? Math.round((project.totalReceived / project.finalPrice) * 100) : 0}%
               </p>
             </CardContent>
@@ -174,12 +179,12 @@ const ProjectDetail = () => {
         </div>
 
         <div className="flex gap-4 mb-6">
-          <Button onClick={() => setShowPaymentForm(true)}>
+          <Button onClick={() => setShowPaymentForm(true)} className="bg-slate-800 hover:bg-slate-700">
             <Plus className="h-4 w-4 mr-2" />
             Add Payment
           </Button>
           {payments.length > 0 && (
-            <Button variant="outline" onClick={exportToCSV}>
+            <Button variant="outline" onClick={exportToCSV} className="border-slate-300 text-slate-700 hover:bg-slate-100">
               <Download className="h-4 w-4 mr-2" />
               Export CSV
             </Button>
