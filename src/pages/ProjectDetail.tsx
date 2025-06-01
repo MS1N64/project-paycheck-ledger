@@ -117,12 +117,19 @@ const ProjectDetail = () => {
   };
 
   const generateTimeline = () => {
-    const milestones = [
+    const milestones: Array<{
+      id: string;
+      stage: string;
+      description: string;
+      status: "completed" | "current" | "pending";
+      date?: string;
+      amount?: number;
+    }> = [
       {
         id: "project-start",
         stage: "Project Started",
         description: "Project initiated and planning begun",
-        status: "completed" as const,
+        status: "completed",
         date: new Date(project?.createdAt).toLocaleDateString()
       }
     ];
@@ -132,7 +139,7 @@ const ProjectDetail = () => {
         id: payment.id,
         stage: payment.stage,
         description: `Payment received: £${payment.total.toLocaleString()}`,
-        status: "completed" as const,
+        status: "completed",
         date: new Date(payment.date).toLocaleDateString(),
         amount: payment.total
       });
@@ -143,7 +150,7 @@ const ProjectDetail = () => {
         id: "final-payment",
         stage: "Final Payment",
         description: `Remaining amount: £${project.totalRemaining.toLocaleString()}`,
-        status: project.status === "Completed" ? "completed" as const : "pending" as const
+        status: project.status === "Completed" ? "completed" : "pending"
       });
     }
 
