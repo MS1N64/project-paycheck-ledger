@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -126,7 +127,7 @@ const Index = () => {
             <img 
               src="/lovable-uploads/7d3f7b33-caa8-4493-8e10-edf7a631b0e2.png" 
               alt="DASS & SONS" 
-              className="h-16 w-auto"
+              className="h-24 w-auto"
             />
             <div>
               <h1 className="text-4xl font-bold text-slate-800 mb-2">Project Payment Tracker</h1>

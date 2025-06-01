@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -182,7 +183,7 @@ const ProjectDetail = () => {
           <img 
             src="/lovable-uploads/7d3f7b33-caa8-4493-8e10-edf7a631b0e2.png" 
             alt="DASS & SONS" 
-            className="h-12 w-auto"
+            className="h-20 w-auto"
           />
           <Button variant="outline" onClick={() => navigate("/")} className="border-slate-300 text-slate-700 hover:bg-slate-100">
             <ArrowLeft className="h-4 w-4 mr-2" />
