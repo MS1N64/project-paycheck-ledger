@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -9,26 +8,38 @@ import ProjectForm from "@/components/ProjectForm";
 import SearchFilter from "@/components/SearchFilter";
 import PaymentReminders from "@/components/PaymentReminders";
 import TaxReporting from "@/components/TaxReporting";
+import DataBackup from "@/components/DataBackup";
 import { useToast } from "@/hooks/use-toast";
+import { SecureStorage } from "@/lib/dataIntegrity";
+import { Project, Payment, FilterState } from "@/types";
 
 const Index = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
-  const [projects, setProjects] = useState<any[]>([]);
-  const [filteredProjects, setFilteredProjects] = useState<any[]>([]);
+  const [projects, setProjects] = useState<Project[]>([]);
+  const [filteredProjects, setFilteredProjects] = useState<Project[]>([]);
   const [showProjectForm, setShowProjectForm] = useState(false);
-  const [editingProject, setEditingProject] = useState<any>(null);
-  const [allPayments, setAllPayments] = useState<any[]>([]);
+  const [editingProject, setEditingProject] = useState<Project | null>(null);
+  const [allPayments, setAllPayments] = useState<Payment[]>([]);
 
   useEffect(() => {
-    const savedProjects = JSON.parse(localStorage.getItem("projects") || "[]");
-    const savedPayments = JSON.parse(localStorage.getItem("payments") || "[]");
-    setProjects(savedProjects);
-    setFilteredProjects(savedProjects);
-    setAllPayments(savedPayments);
-  }, []);
+    try {
+      const savedProjects = SecureStorage.getItem<Project[]>("projects") || [];
+      const savedPayments = SecureStorage.getItem<Payment[]>("payments") || [];
+      setProjects(savedProjects);
+      setFilteredProjects(savedProjects);
+      setAllPayments(savedPayments);
+    } catch (error) {
+      console.error('Failed to load data:', error);
+      toast({
+        title: "Data Load Error",
+        description: "Some data could not be loaded. Please check data integrity.",
+        variant: "destructive"
+      });
+    }
+  }, [toast]);
 
-  const handleFilterChange = (filters: any) => {
+  const handleFilterChange = (filters: FilterState) => {
     let filtered = [...projects];
 
     // Search filter
@@ -68,21 +79,29 @@ const Index = () => {
     setFilteredProjects(filtered);
   };
 
-  const handleCreateProject = (project: any) => {
-    const updatedProjects = editingProject 
-      ? projects.map(p => p.id === editingProject.id ? project : p)
-      : [...projects, project];
-    
-    setProjects(updatedProjects);
-    setFilteredProjects(updatedProjects);
-    localStorage.setItem("projects", JSON.stringify(updatedProjects));
-    setShowProjectForm(false);
-    setEditingProject(null);
-    
-    toast({
-      title: editingProject ? "Project Updated" : "Project Created",
-      description: `${project.address} has been ${editingProject ? "updated" : "created"} successfully.`,
-    });
+  const handleCreateProject = (project: Project) => {
+    try {
+      const updatedProjects = editingProject 
+        ? projects.map(p => p.id === editingProject.id ? project : p)
+        : [...projects, project];
+      
+      setProjects(updatedProjects);
+      setFilteredProjects(updatedProjects);
+      SecureStorage.setItem("projects", updatedProjects);
+      setShowProjectForm(false);
+      setEditingProject(null);
+      
+      toast({
+        title: editingProject ? "Project Updated" : "Project Created",
+        description: `${project.address} has been ${editingProject ? "updated" : "created"} successfully.`,
+      });
+    } catch (error) {
+      toast({
+        title: "Save Error",
+        description: "Failed to save project. Please try again.",
+        variant: "destructive"
+      });
+    }
   };
 
   const handleEditProject = (id: string) => {
@@ -94,21 +113,29 @@ const Index = () => {
   };
 
   const handleDeleteProject = (id: string) => {
-    const updatedProjects = projects.filter(p => p.id !== id);
-    setProjects(updatedProjects);
-    setFilteredProjects(updatedProjects);
-    localStorage.setItem("projects", JSON.stringify(updatedProjects));
-    
-    // Also remove related payments
-    const payments = JSON.parse(localStorage.getItem("payments") || "[]");
-    const updatedPayments = payments.filter((p: any) => p.projectId !== id);
-    localStorage.setItem("payments", JSON.stringify(updatedPayments));
-    setAllPayments(updatedPayments);
-    
-    toast({
-      title: "Project Deleted",
-      description: "Project and all related payments have been removed.",
-    });
+    try {
+      const updatedProjects = projects.filter(p => p.id !== id);
+      setProjects(updatedProjects);
+      setFilteredProjects(updatedProjects);
+      SecureStorage.setItem("projects", updatedProjects);
+      
+      // Also remove related payments
+      const payments = SecureStorage.getItem<Payment[]>("payments") || [];
+      const updatedPayments = payments.filter((p: Payment) => p.projectId !== id);
+      SecureStorage.setItem("payments", updatedPayments);
+      setAllPayments(updatedPayments);
+      
+      toast({
+        title: "Project Deleted",
+        description: "Project and all related payments have been removed.",
+      });
+    } catch (error) {
+      toast({
+        title: "Delete Error",
+        description: "Failed to delete project. Please try again.",
+        variant: "destructive"
+      });
+    }
   };
 
   const handleViewProject = (id: string) => {
@@ -189,8 +216,9 @@ const Index = () => {
           <div className="lg:col-span-2">
             <SearchFilter onFilterChange={handleFilterChange} />
           </div>
-          <div>
+          <div className="space-y-6">
             <PaymentReminders projects={projects} />
+            <DataBackup />
           </div>
         </div>
 
