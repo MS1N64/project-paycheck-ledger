@@ -1,14 +1,11 @@
+
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Plus, Building, TrendingUp, DollarSign } from "lucide-react";
-import ProjectCard from "@/components/ProjectCard";
 import ProjectForm from "@/components/ProjectForm";
-import SearchFilter from "@/components/SearchFilter";
-import PaymentReminders from "@/components/PaymentReminders";
-import TaxReporting from "@/components/TaxReporting";
-import DataBackup from "@/components/DataBackup";
+import DashboardHeader from "@/components/DashboardHeader";
+import DashboardStats from "@/components/DashboardStats";
+import DashboardSidebar from "@/components/DashboardSidebar";
+import ProjectGrid from "@/components/ProjectGrid";
 import { useToast } from "@/hooks/use-toast";
 import { SecureStorage } from "@/lib/dataIntegrity";
 import { Project, Payment, FilterState } from "@/types";
@@ -142,91 +139,22 @@ const Index = () => {
     navigate(`/project/${id}`);
   };
 
-  const totalValue = projects.reduce((sum, project) => sum + project.finalPrice, 0);
-  const totalReceived = projects.reduce((sum, project) => sum + project.totalReceived, 0);
-  const activeProjects = projects.filter(p => p.status !== "Completed").length;
+  const handleShowProjectForm = () => {
+    setShowProjectForm(true);
+  };
 
   return (
     <div className="min-h-screen bg-slate-50">
       <div className="container mx-auto px-4 py-8">
-        <div className="flex justify-between items-center mb-8">
-          <div className="flex items-center gap-6">
-            <img 
-              src="/lovable-uploads/7d3f7b33-caa8-4493-8e10-edf7a631b0e2.png" 
-              alt="DASS & SONS" 
-              className="h-24 w-auto"
-            />
-            <div>
-              <h1 className="text-4xl font-bold text-slate-800 mb-2">Project Payment Tracker</h1>
-              <p className="text-slate-600">Manage and track payments for all your property projects</p>
-            </div>
-          </div>
-          <Button onClick={() => setShowProjectForm(true)} size="lg" className="bg-slate-800 hover:bg-slate-700">
-            <Plus className="h-5 w-5 mr-2" />
-            New Project
-          </Button>
-        </div>
+        <DashboardHeader onCreateProject={handleShowProjectForm} />
 
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-          <Card className="border-slate-200">
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium text-slate-600">Total Projects</CardTitle>
-              <Building className="h-4 w-4 text-slate-400" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold text-slate-800">{projects.length}</div>
-              <p className="text-xs text-slate-500">{activeProjects} active</p>
-            </CardContent>
-          </Card>
-          <Card className="border-slate-200">
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium text-slate-600">Total Value</CardTitle>
-              <DollarSign className="h-4 w-4 text-slate-400" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold text-slate-800">£{totalValue.toLocaleString()}</div>
-              <p className="text-xs text-slate-500">Across all projects</p>
-            </CardContent>
-          </Card>
-          <Card className="border-slate-200">
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium text-slate-600">Total Received</CardTitle>
-              <TrendingUp className="h-4 w-4 text-slate-400" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold text-emerald-600">£{totalReceived.toLocaleString()}</div>
-              <p className="text-xs text-slate-500">
-                {totalValue > 0 ? Math.round((totalReceived / totalValue) * 100) : 0}% of total
-              </p>
-            </CardContent>
-          </Card>
-          <Card className="border-slate-200">
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium text-slate-600">Outstanding</CardTitle>
-              <DollarSign className="h-4 w-4 text-slate-400" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold text-amber-600">£{(totalValue - totalReceived).toLocaleString()}</div>
-              <p className="text-xs text-slate-500">Remaining to collect</p>
-            </CardContent>
-          </Card>
-        </div>
+        <DashboardStats projects={projects} />
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
-          <div className="lg:col-span-2">
-            <SearchFilter onFilterChange={handleFilterChange} />
-          </div>
-          <div className="space-y-6">
-            <PaymentReminders projects={projects} />
-            <DataBackup />
-          </div>
-        </div>
-
-        {allPayments.length > 0 && (
-          <div className="mb-8">
-            <TaxReporting payments={allPayments} />
-          </div>
-        )}
+        <DashboardSidebar 
+          projects={projects}
+          allPayments={allPayments}
+          onFilterChange={handleFilterChange}
+        />
 
         {showProjectForm && (
           <div className="mb-8">
@@ -241,40 +169,14 @@ const Index = () => {
           </div>
         )}
 
-        {filteredProjects.length === 0 ? (
-          <Card className="border-slate-200">
-            <CardContent className="text-center py-12">
-              <Building className="h-16 w-16 text-slate-300 mx-auto mb-4" />
-              <h3 className="text-xl font-semibold text-slate-800 mb-2">
-                {projects.length === 0 ? "No projects yet" : "No projects match your filters"}
-              </h3>
-              <p className="text-slate-600 mb-6">
-                {projects.length === 0 
-                  ? "Get started by creating your first property project"
-                  : "Try adjusting your search criteria"
-                }
-              </p>
-              {projects.length === 0 && (
-                <Button onClick={() => setShowProjectForm(true)} className="bg-slate-800 hover:bg-slate-700">
-                  <Plus className="h-4 w-4 mr-2" />
-                  Create Your First Project
-                </Button>
-              )}
-            </CardContent>
-          </Card>
-        ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filteredProjects.map((project) => (
-              <ProjectCard
-                key={project.id}
-                project={project}
-                onView={handleViewProject}
-                onEdit={handleEditProject}
-                onDelete={handleDeleteProject}
-              />
-            ))}
-          </div>
-        )}
+        <ProjectGrid
+          filteredProjects={filteredProjects}
+          projects={projects}
+          onViewProject={handleViewProject}
+          onEditProject={handleEditProject}
+          onDeleteProject={handleDeleteProject}
+          onCreateProject={handleShowProjectForm}
+        />
       </div>
     </div>
   );
