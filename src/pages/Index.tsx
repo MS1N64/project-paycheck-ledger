@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import ProjectForm from "@/components/ProjectForm";
@@ -5,6 +6,7 @@ import DashboardHeader from "@/components/DashboardHeader";
 import DashboardStats from "@/components/DashboardStats";
 import DashboardSidebar from "@/components/DashboardSidebar";
 import ProjectGrid from "@/components/ProjectGrid";
+import CloudSyncSettings from "@/components/CloudSyncSettings";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import {
   AlertDialog,
