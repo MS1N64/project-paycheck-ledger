@@ -9,7 +9,6 @@
     --dass-blue: #003366;
     --slate-grey: #4A4A4A;
     --soft-white: #F9F9F9;
-    --accent-gold: #FFD700;
     --error-red: #D9534F;
     --success-green: #5CB85C;
 
@@ -32,7 +31,7 @@
     --muted: 245 245 245;
     --muted-foreground: 115 115 115;
 
-    --accent: 255 215 0; /* Accent Gold */
+    --accent: 245 245 245;
     --accent-foreground: 0 51 102;
 
     --destructive: 217 83 79; /* Error Red */
@@ -76,8 +75,8 @@
     --muted: 51 65 85;
     --muted-foreground: 148 163 184;
 
-    --accent: 255 215 0; /* Keep accent gold */
-    --accent-foreground: 15 23 42;
+    --accent: 51 65 85;
+    --accent-foreground: 248 250 252;
 
     --destructive: 239 68 68;
     --destructive-foreground: 248 250 252;
@@ -155,19 +154,7 @@
     border-color: var(--dass-blue);
   }
   
-  .bg-accent-gold {
-    background-color: var(--accent-gold);
-  }
-  
-  .text-accent-gold {
-    color: var(--accent-gold);
-  }
-  
   .hover\:bg-dass-blue-dark:hover {
     background-color: #002244;
-  }
-  
-  .hover\:bg-accent-gold-dark:hover {
-    background-color: #e6c200;
   }
 }

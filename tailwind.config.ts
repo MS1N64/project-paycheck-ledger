@@ -78,11 +78,7 @@ export default {
 					light: '#004080'
 				},
 				'slate-grey': '#4A4A4A',
-				'soft-white': '#F9F9F9',
-				'accent-gold': {
-					DEFAULT: '#FFD700',
-					dark: '#e6c200'
-				}
+				'soft-white': '#F9F9F9'
 			},
 			borderRadius: {
 				lg: 'var(--radius)',
@@ -109,21 +105,21 @@ export default {
 				'dass-spin': {
 					'0%': { 
 						transform: 'rotate(0deg)',
-						borderColor: '#003366 transparent #FFD700 transparent'
+						borderColor: '#003366 transparent #003366 transparent'
 					},
 					'25%': { 
-						borderColor: '#FFD700 #003366 transparent transparent'
+						borderColor: '#003366 #003366 transparent transparent'
 					},
 					'50%': { 
 						transform: 'rotate(180deg)',
-						borderColor: 'transparent #FFD700 #003366 transparent'
+						borderColor: 'transparent #003366 #003366 transparent'
 					},
 					'75%': { 
-						borderColor: 'transparent transparent #FFD700 #003366'
+						borderColor: 'transparent transparent #003366 #003366'
 					},
 					'100%': { 
 						transform: 'rotate(360deg)',
-						borderColor: '#003366 transparent #FFD700 transparent'
+						borderColor: '#003366 transparent #003366 transparent'
 					}
 				}
 			},
