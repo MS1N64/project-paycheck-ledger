@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import ProjectForm from "@/components/ProjectForm";
@@ -158,7 +157,6 @@ const Index = () => {
         <DashboardSidebar 
           projects={projects}
           allPayments={allPayments}
-          onFilterChange={handleFilterChange}
         />
 
         <Dialog open={showProjectForm} onOpenChange={setShowProjectForm}>
