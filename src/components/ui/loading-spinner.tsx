@@ -23,7 +23,7 @@ const LoadingSpinner = React.forwardRef<HTMLDivElement, LoadingSpinnerProps>(
           className
         )}
         style={{
-          borderColor: '#003366 transparent #003366 transparent'
+          borderColor: '#0A2C56 transparent #0A2C56 transparent'
         }}
         {...props}
       />

@@ -37,10 +37,10 @@ const DashboardHeader = ({ onCreateProject }: DashboardHeaderProps) => {
       
       {/* Main dashboard title */}
       <div className="w-full sm:w-auto">
-        <h2 className="text-xl sm:text-2xl font-bold text-slate-grey dark:text-gray-100 mb-1 sm:mb-2 font-inter">
+        <h2 className="text-xl sm:text-2xl font-bold text-foreground mb-1 sm:mb-2 font-inter">
           Project Dashboard
         </h2>
-        <p className="text-sm sm:text-base text-slate-grey/80 dark:text-gray-400 font-roboto">
+        <p className="text-sm sm:text-base text-muted-foreground font-roboto">
           Manage your construction projects and track payments
         </p>
       </div>

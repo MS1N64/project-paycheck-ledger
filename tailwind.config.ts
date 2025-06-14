@@ -73,9 +73,14 @@ export default {
 				},
 				// Brand-specific colors
 				'dass-blue': {
-					DEFAULT: '#003366',
-					dark: '#002244',
-					light: '#004080'
+					DEFAULT: '#0A2C56',
+					dark: '#082242',
+					light: '#1C3B6B'
+				},
+				'accent-blue': {
+					DEFAULT: '#1C84FF',
+					dark: '#0066E5',
+					light: '#4DA3FF'
 				},
 				'slate-grey': '#4A4A4A',
 				'soft-white': '#F9F9F9'
@@ -105,21 +110,21 @@ export default {
 				'dass-spin': {
 					'0%': { 
 						transform: 'rotate(0deg)',
-						borderColor: '#003366 transparent #003366 transparent'
+						borderColor: '#0A2C56 transparent #0A2C56 transparent'
 					},
 					'25%': { 
-						borderColor: '#003366 #003366 transparent transparent'
+						borderColor: '#0A2C56 #0A2C56 transparent transparent'
 					},
 					'50%': { 
 						transform: 'rotate(180deg)',
-						borderColor: 'transparent #003366 #003366 transparent'
+						borderColor: 'transparent #0A2C56 #0A2C56 transparent'
 					},
 					'75%': { 
-						borderColor: 'transparent transparent #003366 #003366'
+						borderColor: 'transparent transparent #0A2C56 #0A2C56'
 					},
 					'100%': { 
 						transform: 'rotate(360deg)',
-						borderColor: '#003366 transparent #003366 transparent'
+						borderColor: '#0A2C56 transparent #0A2C56 transparent'
 					}
 				}
 			},
