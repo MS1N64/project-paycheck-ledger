@@ -9,6 +9,7 @@ import ProjectTimeline from "@/components/ProjectTimeline";
 import DocumentManager from "@/components/DocumentManager";
 import InvoiceGenerator from "@/components/InvoiceGenerator";
 import { useToast } from "@/hooks/use-toast";
+import { useRealtimeSync } from "@/hooks/useRealtimeSync";
 
 const ProjectDetail = () => {
   const { id } = useParams();
@@ -18,6 +19,21 @@ const ProjectDetail = () => {
   const [payments, setPayments] = useState<any[]>([]);
   const [showPaymentForm, setShowPaymentForm] = useState(false);
   const [deletedItems, setDeletedItems] = useState<Map<string, { item: any; type: 'payment' | 'project'; timestamp: number }>>(new Map());
+
+  // Set up real-time sync for this project's data
+  useRealtimeSync({
+    onProjectsUpdate: (projects) => {
+      const currentProject = projects.find((p: any) => p.id === id);
+      if (currentProject) {
+        setProject(currentProject);
+      }
+    },
+    onPaymentsUpdate: (allPayments) => {
+      const projectPayments = allPayments.filter((p: any) => p.projectId === id);
+      setPayments(projectPayments);
+    },
+    enabled: true
+  });
 
   useEffect(() => {
     const projects = JSON.parse(localStorage.getItem("projects") || "[]");

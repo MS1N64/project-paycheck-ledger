@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import ProjectForm from "@/components/ProjectForm";
@@ -20,6 +19,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import { useToast } from "@/hooks/use-toast";
 import { useProjectFilter } from "@/hooks/useProjectFilter";
+import { useRealtimeSync } from "@/hooks/useRealtimeSync";
 import { SecureStorage } from "@/lib/dataIntegrity";
 import { ensureUniqueProjectId } from "@/lib/idGenerator";
 import { Project, Payment } from "@/types";
@@ -39,6 +39,13 @@ const Index = () => {
   
   // Use the custom hook for filtering active projects only
   const { filteredProjects, handleFilterChange } = useProjectFilter(activeProjects);
+
+  // Set up real-time sync for projects and payments
+  useRealtimeSync({
+    onProjectsUpdate: setProjects,
+    onPaymentsUpdate: setAllPayments,
+    enabled: true
+  });
 
   useEffect(() => {
     try {
