@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -6,6 +5,7 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
+import { generateUniqueId } from "@/lib/idGenerator";
 
 interface ProjectFormProps {
   onSubmit: (project: any) => void;
@@ -33,7 +33,7 @@ const ProjectForm = ({ onSubmit, onCancel, initialData }: ProjectFormProps) => {
       ...formData,
       finalPrice: parseFloat(formData.finalPrice) || 0,
       vatRate: parseFloat(formData.vatRate) || 20,
-      id: initialData?.id || Date.now().toString(),
+      id: initialData?.id || generateUniqueId(),
       totalReceived: initialData?.totalReceived || 0,
       totalRemaining: initialData?.totalRemaining || parseFloat(formData.finalPrice) || 0,
       lastPayment: initialData?.lastPayment || "No payments yet",

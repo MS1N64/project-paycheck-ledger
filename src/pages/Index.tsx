@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import ProjectForm from "@/components/ProjectForm";
@@ -8,6 +7,7 @@ import DashboardSidebar from "@/components/DashboardSidebar";
 import ProjectGrid from "@/components/ProjectGrid";
 import { useToast } from "@/hooks/use-toast";
 import { SecureStorage } from "@/lib/dataIntegrity";
+import { ensureUniqueProjectId } from "@/lib/idGenerator";
 import { Project, Payment, FilterState } from "@/types";
 
 const Index = () => {
@@ -78,9 +78,19 @@ const Index = () => {
 
   const handleCreateProject = (project: Project) => {
     try {
-      const updatedProjects = editingProject 
-        ? projects.map(p => p.id === editingProject.id ? project : p)
-        : [...projects, project];
+      let updatedProjects;
+      
+      if (editingProject) {
+        // For editing, keep the existing ID
+        updatedProjects = projects.map(p => p.id === editingProject.id ? project : p);
+      } else {
+        // For new projects, ensure unique ID to prevent collisions
+        const uniqueId = ensureUniqueProjectId(projects, project.id);
+        const projectWithUniqueId = { ...project, id: uniqueId };
+        updatedProjects = [...projects, projectWithUniqueId];
+        
+        console.log(`Creating new project with unique ID: ${uniqueId}`);
+      }
       
       setProjects(updatedProjects);
       setFilteredProjects(updatedProjects);
@@ -93,6 +103,7 @@ const Index = () => {
         description: `${project.address} has been ${editingProject ? "updated" : "created"} successfully.`,
       });
     } catch (error) {
+      console.error('Failed to save project:', error);
       toast({
         title: "Save Error",
         description: "Failed to save project. Please try again.",
