@@ -83,7 +83,7 @@ const Index = () => {
   const projectToDeleteData = activeProjects.find(p => p.id === projectToDelete);
 
   return (
-    <div className="min-h-screen bg-soft-white dark:bg-slate-900">
+    <div className="min-h-screen bg-[#F5F7FA] dark:bg-slate-900">
       <div className="container mx-auto px-3 sm:px-4 py-4 sm:py-8">
         <DashboardHeader onCreateProject={handleShowProjectForm} />
 
