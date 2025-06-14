@@ -16,7 +16,7 @@ import ClientSummary from "./pages/ClientSummary";
 
 const queryClient = new QueryClient();
 
-const AppRoutes = () => (
+const AppContent = () => (
   <BrowserRouter>
     <Routes>
       <Route path="/auth" element={<Auth />} />
@@ -52,6 +52,8 @@ const AppRoutes = () => (
       } />
       <Route path="*" element={<NotFound />} />
     </Routes>
+    <Toaster />
+    <Sonner />
   </BrowserRouter>
 );
 
@@ -59,9 +61,7 @@ const App = () => {
   return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
-        <AppRoutes />
-        <Toaster />
-        <Sonner />
+        <AppContent />
       </TooltipProvider>
     </QueryClientProvider>
   );
