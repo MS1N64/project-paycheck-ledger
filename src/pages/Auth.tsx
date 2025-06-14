@@ -2,12 +2,13 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import AuthForm from "@/components/AuthForm";
+import ProtectedForm from "@/components/ProtectedForm";
 import { useAuth } from "@/hooks/useAuth";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 const Auth = () => {
   const navigate = useNavigate();
   const { user, loading } = useAuth();
+  const [captchaVerified, setCaptchaVerified] = useState(false);
 
   useEffect(() => {
     // Redirect authenticated users to dashboard
@@ -18,6 +19,10 @@ const Auth = () => {
 
   const handleAuthSuccess = () => {
     navigate("/");
+  };
+
+  const handleCaptchaVerified = () => {
+    setCaptchaVerified(true);
   };
 
   if (loading) {
@@ -45,7 +50,9 @@ const Auth = () => {
           </p>
         </div>
         
-        <AuthForm onAuthSuccess={handleAuthSuccess} />
+        <ProtectedForm onVerified={handleCaptchaVerified} action="auth" className="mb-6">
+          <AuthForm onAuthSuccess={handleAuthSuccess} />
+        </ProtectedForm>
         
         <div className="mt-6 text-center text-xs text-[#0A2C56]/60">
           Rooted in tradition, Driven by excellence
