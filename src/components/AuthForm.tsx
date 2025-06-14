@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -11,9 +10,10 @@ import { Eye, EyeOff } from "lucide-react";
 
 interface AuthFormProps {
   onAuthSuccess: () => void;
+  captchaToken: string | null;
 }
 
-const AuthForm = ({ onAuthSuccess }: AuthFormProps) => {
+const AuthForm = ({ onAuthSuccess, captchaToken }: AuthFormProps) => {
   const { toast } = useToast();
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
@@ -27,14 +27,27 @@ const AuthForm = ({ onAuthSuccess }: AuthFormProps) => {
 
   const handleSignIn = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    if (!captchaToken) {
+      toast({
+        title: "Verification required",
+        description: "Please complete the captcha verification first.",
+        variant: "destructive",
+      });
+      return;
+    }
+
     setLoading(true);
 
     try {
-      console.log('Attempting sign in for:', formData.email);
+      console.log('Attempting sign in for:', formData.email, 'with captcha token');
       
       const { data, error } = await supabase.auth.signInWithPassword({
         email: formData.email,
         password: formData.password,
+        options: {
+          captchaToken: captchaToken
+        }
       });
 
       console.log('Sign in response:', { data, error });
@@ -61,6 +74,15 @@ const AuthForm = ({ onAuthSuccess }: AuthFormProps) => {
   const handleSignUp = async (e: React.FormEvent) => {
     e.preventDefault();
     
+    if (!captchaToken) {
+      toast({
+        title: "Verification required",
+        description: "Please complete the captcha verification first.",
+        variant: "destructive",
+      });
+      return;
+    }
+    
     if (formData.password !== formData.confirmPassword) {
       toast({
         title: "Password mismatch",
@@ -82,13 +104,14 @@ const AuthForm = ({ onAuthSuccess }: AuthFormProps) => {
     setLoading(true);
 
     try {
-      console.log('Attempting sign up for:', formData.email);
+      console.log('Attempting sign up for:', formData.email, 'with captcha token');
       
       const { data, error } = await supabase.auth.signUp({
         email: formData.email,
         password: formData.password,
         options: {
           emailRedirectTo: `${window.location.origin}/`,
+          captchaToken: captchaToken,
           data: {
             full_name: formData.fullName || formData.email,
           }
@@ -191,7 +214,7 @@ const AuthForm = ({ onAuthSuccess }: AuthFormProps) => {
               <Button 
                 type="submit" 
                 className="w-full bg-[#0A2C56] hover:bg-[#0A2C56]/90 text-white"
-                disabled={loading}
+                disabled={loading || !captchaToken}
               >
                 {loading ? "Signing in..." : "Sign In"}
               </Button>
@@ -280,7 +303,7 @@ const AuthForm = ({ onAuthSuccess }: AuthFormProps) => {
               <Button 
                 type="submit" 
                 className="w-full bg-[#0A2C56] hover:bg-[#0A2C56]/90 text-white"
-                disabled={loading}
+                disabled={loading || !captchaToken}
               >
                 {loading ? "Creating account..." : "Create Account"}
               </Button>

@@ -8,7 +8,7 @@ import { useAuth } from "@/hooks/useAuth";
 const Auth = () => {
   const navigate = useNavigate();
   const { user, loading } = useAuth();
-  const [captchaVerified, setCaptchaVerified] = useState(false);
+  const [captchaToken, setCaptchaToken] = useState<string | null>(null);
 
   useEffect(() => {
     // Redirect authenticated users to dashboard
@@ -21,8 +21,9 @@ const Auth = () => {
     navigate("/");
   };
 
-  const handleCaptchaVerified = () => {
-    setCaptchaVerified(true);
+  const handleCaptchaVerified = (token: string) => {
+    console.log('Captcha verified with token:', token ? 'received' : 'missing');
+    setCaptchaToken(token);
   };
 
   if (loading) {
@@ -51,7 +52,7 @@ const Auth = () => {
         </div>
         
         <ProtectedForm onVerified={handleCaptchaVerified} action="auth" className="mb-6">
-          <AuthForm onAuthSuccess={handleAuthSuccess} />
+          <AuthForm onAuthSuccess={handleAuthSuccess} captchaToken={captchaToken} />
         </ProtectedForm>
         
         <div className="mt-6 text-center text-xs text-[#0A2C56]/60">

@@ -8,7 +8,7 @@ import { Button } from '@/components/ui/button';
 
 interface ProtectedFormProps {
   children: ReactNode;
-  onVerified: () => void;
+  onVerified: (token: string) => void; // Changed to pass token
   action?: string;
   className?: string;
 }
@@ -57,7 +57,7 @@ const ProtectedForm = ({ children, onVerified, action, className = '' }: Protect
       if (result.success) {
         console.log('Captcha verification successful');
         setIsVerified(true);
-        onVerified();
+        onVerified(token); // Pass the token to parent
         toast({
           title: "Verification successful",
           description: "You can now proceed with your request.",
