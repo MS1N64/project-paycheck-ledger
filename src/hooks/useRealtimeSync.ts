@@ -22,7 +22,7 @@ export const useRealtimeSync = ({
     
     // Fetch fresh project data and update local state
     try {
-      const { data, error } = await supabase
+      const { data, error } = await (supabase as any)
         .from('projects')
         .select('*')
         .order('created_at', { ascending: false });
@@ -69,7 +69,7 @@ export const useRealtimeSync = ({
     
     // Fetch fresh payment data and update local state
     try {
-      const { data, error } = await supabase
+      const { data, error } = await (supabase as any)
         .from('payments')
         .select('*')
         .order('created_at', { ascending: false });
