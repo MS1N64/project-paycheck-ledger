@@ -129,28 +129,28 @@ const AuthForm = ({ onAuthSuccess }: AuthFormProps) => {
           
           <TabsContent value="signin">
             <form onSubmit={handleSignIn} className="space-y-4">
-              <div>
-                <Label htmlFor="signin-email" className="text-[#0A2C56]">Email</Label>
+              <div className="bg-[#F5F7FA] p-4 rounded-lg border border-[#E3E8EF]">
+                <Label htmlFor="signin-email" className="text-[#0A2C56] font-medium">Email</Label>
                 <Input
                   id="signin-email"
                   type="email"
                   value={formData.email}
                   onChange={(e) => setFormData({...formData, email: e.target.value})}
                   required
-                  className="border-[#E3E8EF] focus:border-[#0A2C56] focus:ring-[#0A2C56]"
+                  className="mt-2 bg-white border-[#E3E8EF] focus:border-[#0A2C56] focus:ring-[#0A2C56] text-[#0A2C56]"
                   placeholder="Enter your email"
                 />
               </div>
-              <div>
-                <Label htmlFor="signin-password" className="text-[#0A2C56]">Password</Label>
-                <div className="relative">
+              <div className="bg-[#F5F7FA] p-4 rounded-lg border border-[#E3E8EF]">
+                <Label htmlFor="signin-password" className="text-[#0A2C56] font-medium">Password</Label>
+                <div className="relative mt-2">
                   <Input
                     id="signin-password"
                     type={showPassword ? "text" : "password"}
                     value={formData.password}
                     onChange={(e) => setFormData({...formData, password: e.target.value})}
                     required
-                    className="border-[#E3E8EF] focus:border-[#0A2C56] focus:ring-[#0A2C56] pr-10"
+                    className="bg-white border-[#E3E8EF] focus:border-[#0A2C56] focus:ring-[#0A2C56] pr-10 text-[#0A2C56]"
                     placeholder="Enter your password"
                   />
                   <Button
@@ -180,39 +180,39 @@ const AuthForm = ({ onAuthSuccess }: AuthFormProps) => {
           
           <TabsContent value="signup">
             <form onSubmit={handleSignUp} className="space-y-4">
-              <div>
-                <Label htmlFor="signup-name" className="text-[#0A2C56]">Full Name</Label>
+              <div className="bg-[#F5F7FA] p-4 rounded-lg border border-[#E3E8EF]">
+                <Label htmlFor="signup-name" className="text-[#0A2C56] font-medium">Full Name</Label>
                 <Input
                   id="signup-name"
                   type="text"
                   value={formData.fullName}
                   onChange={(e) => setFormData({...formData, fullName: e.target.value})}
-                  className="border-[#E3E8EF] focus:border-[#0A2C56] focus:ring-[#0A2C56]"
+                  className="mt-2 bg-white border-[#E3E8EF] focus:border-[#0A2C56] focus:ring-[#0A2C56] text-[#0A2C56]"
                   placeholder="Enter your full name"
                 />
               </div>
-              <div>
-                <Label htmlFor="signup-email" className="text-[#0A2C56]">Email</Label>
+              <div className="bg-[#F5F7FA] p-4 rounded-lg border border-[#E3E8EF]">
+                <Label htmlFor="signup-email" className="text-[#0A2C56] font-medium">Email</Label>
                 <Input
                   id="signup-email"
                   type="email"
                   value={formData.email}
                   onChange={(e) => setFormData({...formData, email: e.target.value})}
                   required
-                  className="border-[#E3E8EF] focus:border-[#0A2C56] focus:ring-[#0A2C56]"
+                  className="mt-2 bg-white border-[#E3E8EF] focus:border-[#0A2C56] focus:ring-[#0A2C56] text-[#0A2C56]"
                   placeholder="Enter your email"
                 />
               </div>
-              <div>
-                <Label htmlFor="signup-password" className="text-[#0A2C56]">Password</Label>
-                <div className="relative">
+              <div className="bg-[#F5F7FA] p-4 rounded-lg border border-[#E3E8EF]">
+                <Label htmlFor="signup-password" className="text-[#0A2C56] font-medium">Password</Label>
+                <div className="relative mt-2">
                   <Input
                     id="signup-password"
                     type={showPassword ? "text" : "password"}
                     value={formData.password}
                     onChange={(e) => setFormData({...formData, password: e.target.value})}
                     required
-                    className="border-[#E3E8EF] focus:border-[#0A2C56] focus:ring-[#0A2C56] pr-10"
+                    className="bg-white border-[#E3E8EF] focus:border-[#0A2C56] focus:ring-[#0A2C56] pr-10 text-[#0A2C56]"
                     placeholder="Create a password (min. 6 characters)"
                   />
                   <Button
@@ -230,16 +230,16 @@ const AuthForm = ({ onAuthSuccess }: AuthFormProps) => {
                   </Button>
                 </div>
               </div>
-              <div>
-                <Label htmlFor="confirm-password" className="text-[#0A2C56]">Confirm Password</Label>
-                <div className="relative">
+              <div className="bg-[#F5F7FA] p-4 rounded-lg border border-[#E3E8EF]">
+                <Label htmlFor="confirm-password" className="text-[#0A2C56] font-medium">Confirm Password</Label>
+                <div className="relative mt-2">
                   <Input
                     id="confirm-password"
                     type={showConfirmPassword ? "text" : "password"}
                     value={formData.confirmPassword}
                     onChange={(e) => setFormData({...formData, confirmPassword: e.target.value})}
                     required
-                    className="border-[#E3E8EF] focus:border-[#0A2C56] focus:ring-[#0A2C56] pr-10"
+                    className="bg-white border-[#E3E8EF] focus:border-[#0A2C56] focus:ring-[#0A2C56] pr-10 text-[#0A2C56]"
                     placeholder="Confirm your password"
                   />
                   <Button
