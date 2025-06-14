@@ -8,12 +8,25 @@ import {
   NavigationMenuTrigger,
   navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
+import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { Link, useLocation } from "react-router-dom";
-import { BarChart3, Users, Database, Search, Home, Building } from "lucide-react";
+import { BarChart3, Users, Database, Search, Home, Building, Menu } from "lucide-react";
+import { useIsMobile } from "@/hooks/use-mobile";
+import { useState } from "react";
 
 const MainNavigation = () => {
   const location = useLocation();
+  const isMobile = useIsMobile();
+  const [open, setOpen] = useState(false);
 
   const navigationItems = [
     {
@@ -48,6 +61,55 @@ const MainNavigation = () => {
     }
   ];
 
+  const NavigationLinks = ({ onItemClick }: { onItemClick?: () => void }) => (
+    <div className="grid gap-3 p-4">
+      {navigationItems.map((item) => (
+        <Link
+          key={item.href}
+          to={item.href}
+          onClick={onItemClick}
+          className={cn(
+            "block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-slate-100 dark:hover:bg-slate-700 hover:text-slate-900 dark:hover:text-slate-100 focus:bg-slate-100 dark:focus:bg-slate-700 focus:text-slate-900 dark:focus:text-slate-100",
+            location.pathname === item.href && "bg-slate-100 dark:bg-slate-700 text-slate-900 dark:text-slate-100"
+          )}
+        >
+          <div className="flex items-center gap-2">
+            <item.icon className="h-4 w-4" />
+            <div className="text-sm font-medium leading-none">{item.title}</div>
+          </div>
+          <p className="line-clamp-2 text-xs leading-snug text-slate-500 dark:text-slate-400">
+            {item.description}
+          </p>
+        </Link>
+      ))}
+    </div>
+  );
+
+  if (isMobile) {
+    return (
+      <Sheet open={open} onOpenChange={setOpen}>
+        <SheetTrigger asChild>
+          <Button variant="outline" size="sm" className="md:hidden">
+            <Menu className="h-4 w-4 mr-2" />
+            Menu
+          </Button>
+        </SheetTrigger>
+        <SheetContent side="left" className="w-[300px] sm:w-[400px]">
+          <SheetHeader>
+            <SheetTitle className="flex items-center gap-2">
+              <Building className="h-5 w-5" />
+              Navigation
+            </SheetTitle>
+            <SheetDescription>
+              Navigate to different sections of your project dashboard
+            </SheetDescription>
+          </SheetHeader>
+          <NavigationLinks onItemClick={() => setOpen(false)} />
+        </SheetContent>
+      </Sheet>
+    );
+  }
+
   return (
     <NavigationMenu className="hidden md:flex">
       <NavigationMenuList>
@@ -57,26 +119,8 @@ const MainNavigation = () => {
             Navigation
           </NavigationMenuTrigger>
           <NavigationMenuContent>
-            <div className="grid gap-3 p-4 w-[400px] bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
-              {navigationItems.map((item) => (
-                <NavigationMenuLink key={item.href} asChild>
-                  <Link
-                    to={item.href}
-                    className={cn(
-                      "block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-slate-100 dark:hover:bg-slate-700 hover:text-slate-900 dark:hover:text-slate-100 focus:bg-slate-100 dark:focus:bg-slate-700 focus:text-slate-900 dark:focus:text-slate-100",
-                      location.pathname === item.href && "bg-slate-100 dark:bg-slate-700 text-slate-900 dark:text-slate-100"
-                    )}
-                  >
-                    <div className="flex items-center gap-2">
-                      <item.icon className="h-4 w-4" />
-                      <div className="text-sm font-medium leading-none">{item.title}</div>
-                    </div>
-                    <p className="line-clamp-2 text-xs leading-snug text-slate-500 dark:text-slate-400">
-                      {item.description}
-                    </p>
-                  </Link>
-                </NavigationMenuLink>
-              ))}
+            <div className="w-[400px] bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
+              <NavigationLinks />
             </div>
           </NavigationMenuContent>
         </NavigationMenuItem>
