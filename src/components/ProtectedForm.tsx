@@ -55,12 +55,26 @@ const ProtectedForm = ({ children, onVerified, onReset, action, className = '' }
       return;
     }
 
-    console.log('Starting captcha verification for action:', action, 'with token length:', token?.length);
+    console.log('Captcha token received for action:', action, 'with token length:', token?.length);
     setIsProcessing(true);
     setCaptchaToken(token);
     setVerificationError(null);
 
     try {
+      // For auth actions, skip our verification and pass token directly to Supabase
+      // This prevents the "already-seen-response" error
+      if (action === 'auth' || action === 'cloud-sync') {
+        console.log('Skipping pre-verification for auth action, passing token directly');
+        setIsVerified(true);
+        onVerified(token);
+        toast({
+          title: "Verification successful",
+          description: "You can now proceed with authentication.",
+        });
+        return;
+      }
+
+      // For other actions, verify through our edge function
       const result = await verifyCaptcha(token, action);
 
       if (result.success) {
