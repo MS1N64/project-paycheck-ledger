@@ -14,7 +14,8 @@ interface ProtectedFormProps {
   className?: string;
 }
 
-const HCAPTCHA_SITE_KEY = 'ES_4ae431844cd34cb0b089832c906b142d';
+// Using the correct hCaptcha site key for testing
+const HCAPTCHA_SITE_KEY = '10000000-ffff-ffff-ffff-000000000001';
 
 const ProtectedForm = ({ children, onVerified, action, className = '' }: ProtectedFormProps) => {
   const [isVerified, setIsVerified] = useState(false);
@@ -28,14 +29,16 @@ const ProtectedForm = ({ children, onVerified, action, className = '' }: Protect
   const { toast } = useToast();
 
   const resetCaptcha = () => {
-    const resetFn = (captchaRef.current as any)?.getAttribute('reset');
-    if (resetFn) {
+    console.log('Resetting captcha form state');
+    const resetFn = (captchaRef.current as any)?.reset;
+    if (resetFn && typeof resetFn === 'function') {
       resetFn();
     }
     setCaptchaToken(null);
     setVerificationError(null);
     setIsVerified(false);
     setIsProcessing(false);
+    setShowRateLimitWarning(false);
   };
 
   const handleCaptchaVerify = async (token: string) => {
@@ -44,7 +47,7 @@ const ProtectedForm = ({ children, onVerified, action, className = '' }: Protect
       return;
     }
 
-    console.log('Starting captcha verification for action:', action);
+    console.log('Starting captcha verification for action:', action, 'with token length:', token?.length);
     setIsProcessing(true);
     setCaptchaToken(token);
     setVerificationError(null);
@@ -53,6 +56,7 @@ const ProtectedForm = ({ children, onVerified, action, className = '' }: Protect
       const result = await verifyCaptcha(token, action);
 
       if (result.success) {
+        console.log('Captcha verification successful');
         setIsVerified(true);
         onVerified();
         toast({
@@ -60,6 +64,7 @@ const ProtectedForm = ({ children, onVerified, action, className = '' }: Protect
           description: "You can now proceed with your request.",
         });
       } else {
+        console.error('Captcha verification failed:', result.error);
         setIsVerified(false);
         setVerificationError(result.error || 'Verification failed');
         
@@ -74,13 +79,13 @@ const ProtectedForm = ({ children, onVerified, action, className = '' }: Protect
           setShowRateLimitWarning(true);
         }
 
-        // Reset captcha on failure
-        setTimeout(resetCaptcha, 1000);
+        // Reset captcha on failure after a short delay
+        setTimeout(resetCaptcha, 1500);
       }
     } catch (error) {
       console.error('Captcha verification error:', error);
       setVerificationError('Network error during verification');
-      setTimeout(resetCaptcha, 1000);
+      setTimeout(resetCaptcha, 1500);
     } finally {
       setIsProcessing(false);
     }
@@ -88,9 +93,19 @@ const ProtectedForm = ({ children, onVerified, action, className = '' }: Protect
 
   const handleCaptchaError = (error: string) => {
     console.error('Captcha widget error:', error);
-    setVerificationError(error);
+    
+    // Handle specific error cases
+    if (error.includes('site key') || error.includes('sitekey')) {
+      setVerificationError('Configuration error: Invalid site key. Please contact support.');
+    } else if (error.includes('network') || error.includes('load')) {
+      setVerificationError('Network error: Please check your connection and try again.');
+    } else {
+      setVerificationError(error);
+    }
+    
     setIsVerified(false);
     setIsProcessing(false);
+    
     toast({
       title: "Captcha error",
       description: error,
