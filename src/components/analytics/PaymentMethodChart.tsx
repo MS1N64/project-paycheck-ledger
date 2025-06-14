@@ -24,7 +24,7 @@ const PaymentMethodChart = ({ payments }: PaymentMethodChartProps) => {
     {
       name: "Cash",
       value: paymentMethodData.cash,
-      color: "#eab308"
+      color: "#f97316" // Orange instead of yellow
     }
   ].filter(item => item.value > 0);
 
@@ -35,7 +35,7 @@ const PaymentMethodChart = ({ payments }: PaymentMethodChartProps) => {
     },
     cash: {
       label: "Cash",
-      color: "hsl(48, 96%, 53%)",
+      color: "hsl(25, 95%, 53%)", // Orange instead of yellow
     },
   };
 

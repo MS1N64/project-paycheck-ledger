@@ -46,7 +46,7 @@ const Analytics = () => {
   }, [projects, payments]);
 
   return (
-    <div className="min-h-screen bg-slate-50 p-4">
+    <div className="min-h-screen bg-[#F5F7FA] p-4">
       <div className="max-w-7xl mx-auto">
         <div className="mb-6">
           <Button
@@ -88,10 +88,10 @@ const Analytics = () => {
             <Card className="border-slate-200">
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                 <CardTitle className="text-sm font-medium text-slate-600">Outstanding</CardTitle>
-                <PieChart className="h-4 w-4 text-amber-400" />
+                <PieChart className="h-4 w-4 text-orange-400" />
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold text-amber-600">£{analytics.totalOutstanding.toLocaleString()}</div>
+                <div className="text-2xl font-bold text-orange-600">£{analytics.totalOutstanding.toLocaleString()}</div>
               </CardContent>
             </Card>
             

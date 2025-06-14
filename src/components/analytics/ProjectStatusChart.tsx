@@ -25,15 +25,15 @@ const ProjectStatusChart = ({ projects }: ProjectStatusChartProps) => {
     },
     Pending: {
       label: "Pending",
-      color: "hsl(48, 96%, 53%)",
+      color: "hsl(25, 95%, 53%)", // Orange instead of yellow
     },
     "In Progress": {
       label: "In Progress", 
-      color: "hsl(221, 83%, 53%)",
+      color: "hsl(221, 83%, 53%)", // Blue
     },
     Completed: {
       label: "Completed",
-      color: "hsl(142, 76%, 36%)",
+      color: "hsl(142, 76%, 36%)", // Green
     },
   };
 
