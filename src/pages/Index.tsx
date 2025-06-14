@@ -6,6 +6,16 @@ import DashboardStats from "@/components/DashboardStats";
 import DashboardSidebar from "@/components/DashboardSidebar";
 import ProjectGrid from "@/components/ProjectGrid";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import { useToast } from "@/hooks/use-toast";
 import { SecureStorage } from "@/lib/dataIntegrity";
 import { ensureUniqueProjectId } from "@/lib/idGenerator";
@@ -19,6 +29,7 @@ const Index = () => {
   const [showProjectForm, setShowProjectForm] = useState(false);
   const [editingProject, setEditingProject] = useState<Project | null>(null);
   const [allPayments, setAllPayments] = useState<Payment[]>([]);
+  const [projectToDelete, setProjectToDelete] = useState<string | null>(null);
 
   useEffect(() => {
     try {
@@ -132,15 +143,21 @@ const Index = () => {
   };
 
   const handleDeleteProject = (id: string) => {
+    setProjectToDelete(id);
+  };
+
+  const confirmDeleteProject = () => {
+    if (!projectToDelete) return;
+    
     try {
-      const updatedProjects = projects.filter(p => p.id !== id);
+      const updatedProjects = projects.filter(p => p.id !== projectToDelete);
       setProjects(updatedProjects);
       setFilteredProjects(updatedProjects);
       SecureStorage.setItem("projects", updatedProjects);
       
       // Also remove related payments
       const payments = SecureStorage.getItem<Payment[]>("payments") || [];
-      const updatedPayments = payments.filter((p: Payment) => p.projectId !== id);
+      const updatedPayments = payments.filter((p: Payment) => p.projectId !== projectToDelete);
       SecureStorage.setItem("payments", updatedPayments);
       setAllPayments(updatedPayments);
       
@@ -154,6 +171,8 @@ const Index = () => {
         description: "Failed to delete project. Please try again.",
         variant: "destructive"
       });
+    } finally {
+      setProjectToDelete(null);
     }
   };
 
@@ -164,6 +183,8 @@ const Index = () => {
   const handleShowProjectForm = () => {
     setShowProjectForm(true);
   };
+
+  const projectToDeleteData = projects.find(p => p.id === projectToDelete);
 
   return (
     <div className="min-h-screen bg-slate-50">
@@ -190,6 +211,27 @@ const Index = () => {
             />
           </DialogContent>
         </Dialog>
+
+        <AlertDialog open={!!projectToDelete} onOpenChange={() => setProjectToDelete(null)}>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>Delete Project</AlertDialogTitle>
+              <AlertDialogDescription>
+                Are you sure you want to delete "{projectToDeleteData?.address}"? 
+                This action cannot be undone and will also remove all related payments.
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel>Cancel</AlertDialogCancel>
+              <AlertDialogAction 
+                onClick={confirmDeleteProject}
+                className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+              >
+                Delete Project
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
 
         <ProjectGrid
           filteredProjects={filteredProjects}
