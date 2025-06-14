@@ -17,99 +17,93 @@ export const useRealtimeSync = ({
 }: UseRealtimeSyncProps) => {
   const { toast } = useToast();
 
-  const handleProjectChange = useCallback((payload: any) => {
+  const handleProjectChange = useCallback(async (payload: any) => {
     console.log('Project real-time update:', payload);
     
     // Fetch fresh project data and update local state
-    const fetchProjects = async () => {
-      try {
-        const { data, error } = await supabase
-          .from('projects')
-          .select('*')
-          .order('created_at', { ascending: false });
-        
-        if (error) throw error;
-        
-        // Transform from database schema to app schema
-        const transformedProjects: Project[] = (data || []).map((project: any) => ({
-          id: project.id,
-          address: project.address,
-          finalPrice: project.final_price,
-          vatRate: project.vat_rate,
-          status: project.status,
-          currency: project.currency,
-          clientName: project.client_name,
-          clientEmail: project.client_email,
-          clientPhone: project.client_phone,
-          clientAddress: project.client_address,
-          notes: project.notes,
-          totalReceived: project.total_received,
-          totalRemaining: project.total_remaining,
-          lastPayment: project.last_payment,
-          createdAt: project.created_at,
-          deletedAt: project.deleted_at
-        }));
-        
-        onProjectsUpdate(transformedProjects);
-        
-        // Show notification for updates from other users
-        if (payload.eventType !== 'INSERT' || payload.new?.user_id !== (await supabase.auth.getUser()).data.user?.id) {
-          toast({
-            title: "Project Updated",
-            description: "A project has been updated by another user.",
-          });
-        }
-      } catch (error) {
-        console.error('Failed to fetch updated projects:', error);
+    try {
+      const { data, error } = await supabase
+        .from('projects')
+        .select('*')
+        .order('created_at', { ascending: false });
+      
+      if (error) throw error;
+      
+      // Transform from database schema to app schema
+      const transformedProjects: Project[] = (data || []).map((project: any) => ({
+        id: project.id,
+        address: project.address,
+        finalPrice: project.final_price,
+        vatRate: project.vat_rate,
+        status: project.status,
+        currency: project.currency,
+        clientName: project.client_name,
+        clientEmail: project.client_email,
+        clientPhone: project.client_phone,
+        clientAddress: project.client_address,
+        notes: project.notes,
+        totalReceived: project.total_received,
+        totalRemaining: project.total_remaining,
+        lastPayment: project.last_payment,
+        createdAt: project.created_at,
+        deletedAt: project.deleted_at
+      }));
+      
+      onProjectsUpdate(transformedProjects);
+      
+      // Show notification for updates from other users
+      const { data: { user } } = await supabase.auth.getUser();
+      if (payload.eventType !== 'INSERT' || payload.new?.user_id !== user?.id) {
+        toast({
+          title: "Project Updated",
+          description: "A project has been updated by another user.",
+        });
       }
-    };
-    
-    fetchProjects();
+    } catch (error) {
+      console.error('Failed to fetch updated projects:', error);
+    }
   }, [onProjectsUpdate, toast]);
 
-  const handlePaymentChange = useCallback((payload: any) => {
+  const handlePaymentChange = useCallback(async (payload: any) => {
     console.log('Payment real-time update:', payload);
     
     // Fetch fresh payment data and update local state
-    const fetchPayments = async () => {
-      try {
-        const { data, error } = await supabase
-          .from('payments')
-          .select('*')
-          .order('created_at', { ascending: false });
-        
-        if (error) throw error;
-        
-        // Transform from database schema to app schema
-        const transformedPayments: Payment[] = (data || []).map((payment: any) => ({
-          id: payment.id,
-          projectId: payment.project_id,
-          stage: payment.stage,
-          date: new Date(payment.date),
-          invoice: payment.invoice,
-          invoiceWithVAT: payment.invoice_with_vat,
-          transfer: payment.transfer,
-          cash: payment.cash,
-          vat: payment.vat,
-          total: payment.total,
-          createdAt: payment.created_at
-        }));
-        
-        onPaymentsUpdate(transformedPayments);
-        
-        // Show notification for updates from other users
-        if (payload.eventType !== 'INSERT' || payload.new?.user_id !== (await supabase.auth.getUser()).data.user?.id) {
-          toast({
-            title: "Payment Updated",
-            description: "A payment has been updated by another user.",
-          });
-        }
-      } catch (error) {
-        console.error('Failed to fetch updated payments:', error);
+    try {
+      const { data, error } = await supabase
+        .from('payments')
+        .select('*')
+        .order('created_at', { ascending: false });
+      
+      if (error) throw error;
+      
+      // Transform from database schema to app schema
+      const transformedPayments: Payment[] = (data || []).map((payment: any) => ({
+        id: payment.id,
+        projectId: payment.project_id,
+        stage: payment.stage,
+        date: new Date(payment.date),
+        invoice: payment.invoice,
+        invoiceWithVAT: payment.invoice_with_vat,
+        transfer: payment.transfer,
+        cash: payment.cash,
+        vat: payment.vat,
+        total: payment.total,
+        createdAt: payment.created_at
+      }));
+      
+      onPaymentsUpdate(transformedPayments);
+      
+      // Show notification for updates from other users
+      const { data: { user } } = await supabase.auth.getUser();
+      if (payload.eventType !== 'INSERT' || payload.new?.user_id !== user?.id) {
+        toast({
+          title: "Payment Updated",
+          description: "A payment has been updated by another user.",
+        });
       }
-    };
-    
-    fetchPayments();
+    } catch (error) {
+      console.error('Failed to fetch updated payments:', error);
+    }
   }, [onPaymentsUpdate, toast]);
 
   useEffect(() => {
