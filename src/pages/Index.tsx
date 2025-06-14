@@ -74,6 +74,12 @@ const Index = () => {
     navigate(`/project/${id}`);
   };
 
+  const handleProjectFormOpenChange = (open: boolean) => {
+    if (!open) {
+      handleCancelProjectForm();
+    }
+  };
+
   const projectToDeleteData = activeProjects.find(p => p.id === projectToDelete);
 
   return (
@@ -93,7 +99,7 @@ const Index = () => {
 
         <ProjectFormDialog
           open={showProjectForm}
-          onOpenChange={setProjectToDelete}
+          onOpenChange={handleProjectFormOpenChange}
           editingProject={editingProject}
           onSubmit={handleCreateProject}
           onCancel={handleCancelProjectForm}
