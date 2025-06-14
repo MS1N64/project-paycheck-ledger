@@ -5,98 +5,97 @@
 
 @layer base {
   :root {
-    /* Dass & Sons Brand Colors - Light Mode */
-    --dass-blue: #0A2C56;
-    --accent-blue: #1C84FF;
-    --destructive-red: #E5484D;
-    --muted-grey: #6B7280;
-    --soft-white: #F5F7FA;
+    /* Dass & Sons Brand Colors */
+    --dass-blue: #003366;
+    --slate-grey: #4A4A4A;
+    --soft-white: #F9F9F9;
+    --error-red: #D9534F;
+    --success-green: #5CB85C;
 
     /* Updated shadcn variables with brand colors */
-    --background: 245 247 250; /* #F5F7FA */
-    --foreground: 10 44 86; /* #0A2C56 */
+    --background: 249 249 249; /* Soft White */
+    --foreground: 74 74 74; /* Slate Grey */
 
     --card: 255 255 255;
-    --card-foreground: 10 44 86;
+    --card-foreground: 74 74 74;
 
     --popover: 255 255 255;
-    --popover-foreground: 10 44 86;
+    --popover-foreground: 74 74 74;
 
-    --primary: 28 132 255; /* #1C84FF - Accent Blue */
+    --primary: 0 51 102; /* Dass Blue */
     --primary-foreground: 255 255 255;
 
-    --secondary: 245 247 250; /* #F5F7FA */
-    --secondary-foreground: 10 44 86;
+    --secondary: 240 240 240;
+    --secondary-foreground: 0 51 102;
 
-    --muted: 245 247 250;
-    --muted-foreground: 107 114 128; /* #6B7280 */
+    --muted: 245 245 245;
+    --muted-foreground: 115 115 115;
 
-    --accent: 245 247 250;
-    --accent-foreground: 10 44 86;
+    --accent: 245 245 245;
+    --accent-foreground: 0 51 102;
 
-    --destructive: 229 72 77; /* #E5484D */
+    --destructive: 217 83 79; /* Error Red */
     --destructive-foreground: 255 255 255;
 
-    --success: 34 197 94;
+    --success: 92 184 92; /* Success Green */
     --success-foreground: 255 255 255;
 
     --border: 230 230 230;
     --input: 230 230 230;
-    --ring: 28 132 255; /* #1C84FF */
+    --ring: 0 51 102;
 
     --radius: 0.5rem;
 
-    --sidebar-background: 245 247 250;
-    --sidebar-foreground: 10 44 86;
-    --sidebar-primary: 28 132 255;
+    --sidebar-background: 249 249 249;
+    --sidebar-foreground: 74 74 74;
+    --sidebar-primary: 0 51 102;
     --sidebar-primary-foreground: 255 255 255;
-    --sidebar-accent: 245 247 250;
-    --sidebar-accent-foreground: 10 44 86;
+    --sidebar-accent: 240 240 240;
+    --sidebar-accent-foreground: 0 51 102;
     --sidebar-border: 230 230 230;
-    --sidebar-ring: 28 132 255;
+    --sidebar-ring: 0 51 102;
   }
 
   .dark {
-    /* Dass & Sons Brand Colors - Dark Mode */
-    --background: 26 29 35; /* #1A1D23 */
-    --foreground: 230 237 243; /* #E6EDF3 */
+    --background: 15 23 42; /* Darker slate for dark mode */
+    --foreground: 248 250 252;
 
-    --card: 42 46 53; /* #2A2E35 */
-    --card-foreground: 230 237 243;
+    --card: 30 41 59;
+    --card-foreground: 248 250 252;
 
-    --popover: 42 46 53;
-    --popover-foreground: 230 237 243;
+    --popover: 30 41 59;
+    --popover-foreground: 248 250 252;
 
-    --primary: 60 158 255; /* #3C9EFF - Dark mode accent */
-    --primary-foreground: 26 29 35;
+    --primary: 59 130 246; /* Lighter blue for dark mode */
+    --primary-foreground: 15 23 42;
 
-    --secondary: 42 46 53;
-    --secondary-foreground: 230 237 243;
+    --secondary: 51 65 85;
+    --secondary-foreground: 248 250 252;
 
-    --muted: 42 46 53;
+    --muted: 51 65 85;
     --muted-foreground: 148 163 184;
 
-    --accent: 42 46 53;
-    --accent-foreground: 230 237 243;
+    --accent: 51 65 85;
+    --accent-foreground: 248 250 252;
 
-    --destructive: 255 94 108; /* #FF5E6C */
-    --destructive-foreground: 230 237 243;
+    --destructive: 239 68 68;
+    --destructive-foreground: 248 250 252;
 
     --success: 34 197 94;
-    --success-foreground: 230 237 243;
+    --success-foreground: 248 250 252;
 
-    --border: 42 46 53;
-    --input: 42 46 53;
-    --ring: 60 158 255;
+    --border: 51 65 85;
+    --input: 51 65 85;
+    --ring: 59 130 246;
 
-    --sidebar-background: 26 29 35;
-    --sidebar-foreground: 230 237 243;
-    --sidebar-primary: 60 158 255;
-    --sidebar-primary-foreground: 26 29 35;
-    --sidebar-accent: 42 46 53;
-    --sidebar-accent-foreground: 230 237 243;
-    --sidebar-border: 42 46 53;
-    --sidebar-ring: 60 158 255;
+    --sidebar-background: 15 23 42;
+    --sidebar-foreground: 248 250 252;
+    --sidebar-primary: 59 130 246;
+    --sidebar-primary-foreground: 15 23 42;
+    --sidebar-accent: 51 65 85;
+    --sidebar-accent-foreground: 248 250 252;
+    --sidebar-border: 51 65 85;
+    --sidebar-ring: 59 130 246;
   }
 }
 
@@ -144,30 +143,18 @@
 /* Custom brand utilities */
 @layer utilities {
   .bg-dass-blue {
-    background-color: #0A2C56;
+    background-color: var(--dass-blue);
   }
   
   .text-dass-blue {
-    color: #0A2C56;
+    color: var(--dass-blue);
   }
   
   .border-dass-blue {
-    border-color: #0A2C56;
+    border-color: var(--dass-blue);
   }
   
   .hover\:bg-dass-blue-dark:hover {
-    background-color: #082441;
-  }
-
-  .bg-accent-blue {
-    background-color: #1C84FF;
-  }
-
-  .text-accent-blue {
-    color: #1C84FF;
-  }
-
-  .hover\:bg-accent-blue-dark:hover {
-    background-color: #1570E6;
+    background-color: #002244;
   }
 }
