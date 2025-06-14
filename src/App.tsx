@@ -9,6 +9,7 @@ import DataBackupPage from "./pages/DataBackup";
 import NotFound from "./pages/NotFound";
 import SearchFilterPage from "./pages/SearchFilter";
 import Analytics from "./pages/Analytics";
+import ClientSummary from "./pages/ClientSummary";
 
 const queryClient = new QueryClient();
 
@@ -20,6 +21,7 @@ const AppRoutes = () => (
       <Route path="/backup" element={<DataBackupPage />} />
       <Route path="/search" element={<SearchFilterPage />} />
       <Route path="/analytics" element={<Analytics />} />
+      <Route path="/clients" element={<ClientSummary />} />
       <Route path="*" element={<NotFound />} />
     </Routes>
   </BrowserRouter>
