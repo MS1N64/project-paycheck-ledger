@@ -30,10 +30,14 @@ const AuthForm = ({ onAuthSuccess }: AuthFormProps) => {
     setLoading(true);
 
     try {
-      const { error } = await supabase.auth.signInWithPassword({
+      console.log('Attempting sign in for:', formData.email);
+      
+      const { data, error } = await supabase.auth.signInWithPassword({
         email: formData.email,
         password: formData.password,
       });
+
+      console.log('Sign in response:', { data, error });
 
       if (error) throw error;
 
@@ -43,9 +47,10 @@ const AuthForm = ({ onAuthSuccess }: AuthFormProps) => {
       });
       onAuthSuccess();
     } catch (error: any) {
+      console.error('Sign in error:', error);
       toast({
         title: "Sign in failed",
-        description: error.message,
+        description: error.message || "An error occurred during sign in",
         variant: "destructive",
       });
     } finally {
@@ -77,7 +82,9 @@ const AuthForm = ({ onAuthSuccess }: AuthFormProps) => {
     setLoading(true);
 
     try {
-      const { error } = await supabase.auth.signUp({
+      console.log('Attempting sign up for:', formData.email);
+      
+      const { data, error } = await supabase.auth.signUp({
         email: formData.email,
         password: formData.password,
         options: {
@@ -88,16 +95,29 @@ const AuthForm = ({ onAuthSuccess }: AuthFormProps) => {
         }
       });
 
+      console.log('Sign up response:', { data, error });
+
       if (error) throw error;
 
-      toast({
-        title: "Check your email",
-        description: "We've sent you a confirmation link to complete your registration.",
-      });
+      // Check if email confirmation is required
+      if (data.user && !data.session) {
+        toast({
+          title: "Check your email",
+          description: "We've sent you a confirmation link to complete your registration.",
+        });
+      } else if (data.session) {
+        // Auto-signed in (email confirmation disabled)
+        toast({
+          title: "Account created!",
+          description: "Welcome to Dass & Sons Ltd.",
+        });
+        onAuthSuccess();
+      }
     } catch (error: any) {
+      console.error('Sign up error:', error);
       toast({
         title: "Sign up failed",
-        description: error.message,
+        description: error.message || "An error occurred during sign up",
         variant: "destructive",
       });
     } finally {
