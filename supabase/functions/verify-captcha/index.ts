@@ -96,11 +96,15 @@ async function checkRateLimit(ip: string): Promise<{ allowed: boolean; remaining
 }
 
 async function verifyHCaptcha(token: string, userIp?: string): Promise<{ success: boolean; error?: string }> {
+  // Get the secret key from environment variables
   const secretKey = Deno.env.get('HCAPTCHA_SECRET_KEY');
   
   if (!secretKey) {
+    console.error('hCaptcha secret key not found in environment variables');
     return { success: false, error: 'hCaptcha secret key not configured' };
   }
+
+  console.log('Attempting hCaptcha verification with token length:', token?.length);
 
   try {
     const formData = new FormData();
@@ -110,23 +114,43 @@ async function verifyHCaptcha(token: string, userIp?: string): Promise<{ success
       formData.append('remoteip', userIp);
     }
 
+    console.log('Sending verification request to hCaptcha API');
     const response = await fetch('https://hcaptcha.com/siteverify', {
       method: 'POST',
       body: formData,
     });
 
+    if (!response.ok) {
+      console.error('hCaptcha API response not ok:', response.status, response.statusText);
+      return { success: false, error: 'hCaptcha API unavailable' };
+    }
+
     const result = await response.json();
+    console.log('hCaptcha verification result:', result);
     
     if (result.success) {
+      console.log('hCaptcha verification successful');
       return { success: true };
     } else {
-      return { 
-        success: false, 
-        error: result['error-codes']?.join(', ') || 'Captcha verification failed' 
-      };
+      const errorCodes = result['error-codes'] || [];
+      console.error('hCaptcha verification failed with error codes:', errorCodes);
+      
+      // Provide more specific error messages
+      if (errorCodes.includes('invalid-input-secret')) {
+        return { success: false, error: 'Invalid hCaptcha secret key configuration' };
+      } else if (errorCodes.includes('invalid-input-response')) {
+        return { success: false, error: 'Invalid captcha response token' };
+      } else if (errorCodes.includes('timeout-or-duplicate')) {
+        return { success: false, error: 'Captcha token has expired or been used already' };
+      } else {
+        return { 
+          success: false, 
+          error: errorCodes.join(', ') || 'Captcha verification failed' 
+        };
+      }
     }
   } catch (error) {
-    console.error('hCaptcha verification error:', error);
+    console.error('hCaptcha verification network error:', error);
     return { success: false, error: 'Captcha verification service unavailable' };
   }
 }
