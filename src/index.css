@@ -5,13 +5,12 @@
 
 @layer base {
   :root {
-    /* Dass & Sons Brand Colors */
+    /* Dass & Sons Brand Colors - Light Mode */
     --dass-blue: #0A2C56;
-    --slate-grey: #4A4A4A;
-    --soft-white: #F9F9F9;
-    --error-red: #E5484D;
-    --success-green: #5CB85C;
     --accent-blue: #1C84FF;
+    --destructive-red: #E5484D;
+    --muted-grey: #6B7280;
+    --soft-white: #F5F7FA;
 
     /* Updated shadcn variables with brand colors */
     --background: 245 247 250; /* #F5F7FA */
@@ -23,33 +22,33 @@
     --popover: 255 255 255;
     --popover-foreground: 10 44 86;
 
-    --primary: 10 44 86; /* #0A2C56 Dass Blue */
+    --primary: 28 132 255; /* #1C84FF - Accent Blue */
     --primary-foreground: 255 255 255;
 
-    --secondary: 245 247 250;
+    --secondary: 245 247 250; /* #F5F7FA */
     --secondary-foreground: 10 44 86;
 
     --muted: 245 247 250;
-    --muted-foreground: 107 114 128; /* Neutral grey */
+    --muted-foreground: 107 114 128; /* #6B7280 */
 
-    --accent: 28 132 255; /* #1C84FF */
-    --accent-foreground: 255 255 255;
+    --accent: 245 247 250;
+    --accent-foreground: 10 44 86;
 
     --destructive: 229 72 77; /* #E5484D */
     --destructive-foreground: 255 255 255;
 
-    --success: 92 184 92; /* Success Green */
+    --success: 34 197 94;
     --success-foreground: 255 255 255;
 
     --border: 230 230 230;
     --input: 230 230 230;
-    --ring: 28 132 255; /* Accent blue for focus rings */
+    --ring: 28 132 255; /* #1C84FF */
 
     --radius: 0.5rem;
 
     --sidebar-background: 245 247 250;
     --sidebar-foreground: 10 44 86;
-    --sidebar-primary: 10 44 86;
+    --sidebar-primary: 28 132 255;
     --sidebar-primary-foreground: 255 255 255;
     --sidebar-accent: 245 247 250;
     --sidebar-accent-foreground: 10 44 86;
@@ -58,6 +57,7 @@
   }
 
   .dark {
+    /* Dass & Sons Brand Colors - Dark Mode */
     --background: 26 29 35; /* #1A1D23 */
     --foreground: 230 237 243; /* #E6EDF3 */
 
@@ -67,7 +67,7 @@
     --popover: 42 46 53;
     --popover-foreground: 230 237 243;
 
-    --primary: 60 158 255; /* #3C9EFF - lighter blue for dark mode */
+    --primary: 60 158 255; /* #3C9EFF - Dark mode accent */
     --primary-foreground: 26 29 35;
 
     --secondary: 42 46 53;
@@ -76,8 +76,8 @@
     --muted: 42 46 53;
     --muted-foreground: 148 163 184;
 
-    --accent: 60 158 255; /* #3C9EFF */
-    --accent-foreground: 26 29 35;
+    --accent: 42 46 53;
+    --accent-foreground: 230 237 243;
 
     --destructive: 255 94 108; /* #FF5E6C */
     --destructive-foreground: 230 237 243;
@@ -156,7 +156,7 @@
   }
   
   .hover\:bg-dass-blue-dark:hover {
-    background-color: #082242;
+    background-color: #082441;
   }
 
   .bg-accent-blue {
@@ -165,5 +165,9 @@
 
   .text-accent-blue {
     color: #1C84FF;
+  }
+
+  .hover\:bg-accent-blue-dark:hover {
+    background-color: #1570E6;
   }
 }

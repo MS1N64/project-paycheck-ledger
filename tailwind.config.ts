@@ -74,16 +74,16 @@ export default {
 				// Brand-specific colors
 				'dass-blue': {
 					DEFAULT: '#0A2C56',
-					dark: '#082242',
-					light: '#1C3B6B'
+					dark: '#082441',
+					light: '#1C3A66'
 				},
 				'accent-blue': {
 					DEFAULT: '#1C84FF',
-					dark: '#0066E5',
-					light: '#4DA3FF'
+					dark: '#1570E6',
+					light: '#3C9EFF'
 				},
-				'slate-grey': '#4A4A4A',
-				'soft-white': '#F9F9F9'
+				'slate-grey': '#6B7280',
+				'soft-white': '#F5F7FA'
 			},
 			borderRadius: {
 				lg: 'var(--radius)',

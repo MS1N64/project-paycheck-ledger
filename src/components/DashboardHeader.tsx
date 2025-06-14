@@ -24,7 +24,7 @@ const DashboardHeader = ({ onCreateProject }: DashboardHeaderProps) => {
             <DarkModeToggle />
             <Button 
               onClick={onCreateProject} 
-              className="bg-dass-blue hover:bg-dass-blue-dark text-white text-sm sm:text-base px-3 sm:px-4 py-2 font-medium"
+              className="bg-primary hover:bg-primary/90 text-primary-foreground text-sm sm:text-base px-3 sm:px-4 py-2 font-medium"
               size="sm"
             >
               <Plus className="mr-1 sm:mr-2 h-4 w-4" />

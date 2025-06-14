@@ -20,7 +20,7 @@ const DashboardStats = ({ projects }: DashboardStatsProps) => {
           <Building className="h-3 w-3 sm:h-4 sm:w-4 text-muted-foreground" />
         </CardHeader>
         <CardContent className="px-3 sm:px-6 pb-3 sm:pb-6">
-          <div className="text-lg sm:text-2xl font-bold text-foreground">{projects.length}</div>
+          <div className="text-lg sm:text-2xl font-bold text-card-foreground">{projects.length}</div>
           <p className="text-xs text-muted-foreground">{activeProjects} active</p>
         </CardContent>
       </Card>
@@ -30,7 +30,7 @@ const DashboardStats = ({ projects }: DashboardStatsProps) => {
           <DollarSign className="h-3 w-3 sm:h-4 sm:w-4 text-muted-foreground" />
         </CardHeader>
         <CardContent className="px-3 sm:px-6 pb-3 sm:pb-6">
-          <div className="text-lg sm:text-2xl font-bold text-foreground">£{totalValue.toLocaleString()}</div>
+          <div className="text-lg sm:text-2xl font-bold text-card-foreground">£{totalValue.toLocaleString()}</div>
           <p className="text-xs text-muted-foreground">Across all projects</p>
         </CardContent>
       </Card>
@@ -40,7 +40,7 @@ const DashboardStats = ({ projects }: DashboardStatsProps) => {
           <TrendingUp className="h-3 w-3 sm:h-4 sm:w-4 text-muted-foreground" />
         </CardHeader>
         <CardContent className="px-3 sm:px-6 pb-3 sm:pb-6">
-          <div className="text-lg sm:text-2xl font-bold text-emerald-600 dark:text-emerald-400">£{totalReceived.toLocaleString()}</div>
+          <div className="text-lg sm:text-2xl font-bold text-green-600 dark:text-green-400">£{totalReceived.toLocaleString()}</div>
           <p className="text-xs text-muted-foreground">
             {totalValue > 0 ? Math.round((totalReceived / totalValue) * 100) : 0}% of total
           </p>
@@ -52,7 +52,7 @@ const DashboardStats = ({ projects }: DashboardStatsProps) => {
           <DollarSign className="h-3 w-3 sm:h-4 sm:w-4 text-muted-foreground" />
         </CardHeader>
         <CardContent className="px-3 sm:px-6 pb-3 sm:pb-6">
-          <div className="text-lg sm:text-2xl font-bold text-accent dark:text-accent">£{(totalValue - totalReceived).toLocaleString()}</div>
+          <div className="text-lg sm:text-2xl font-bold text-primary">£{(totalValue - totalReceived).toLocaleString()}</div>
           <p className="text-xs text-muted-foreground">Remaining to collect</p>
         </CardContent>
       </Card>
