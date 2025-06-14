@@ -46,14 +46,14 @@ const MonthlyIncomeChart = ({ payments }: MonthlyIncomeChartProps) => {
     },
     cash: {
       label: "Cash",
-      color: "hsl(48, 96%, 53%)",
+      color: "hsl(25, 95%, 53%)", // Orange instead of yellow
     },
   };
 
   return (
-    <Card className="border-slate-200">
+    <Card className="border-slate-200 bg-[#F5F7FA]">
       <CardHeader>
-        <CardTitle className="text-slate-800">Monthly Income</CardTitle>
+        <CardTitle className="text-[#0A2C56]">Monthly Income</CardTitle>
       </CardHeader>
       <CardContent>
         {chartData.length > 0 ? (
@@ -66,7 +66,7 @@ const MonthlyIncomeChart = ({ payments }: MonthlyIncomeChartProps) => {
             </BarChart>
           </ChartContainer>
         ) : (
-          <div className="h-[300px] flex items-center justify-center text-slate-500">
+          <div className="h-[300px] flex items-center justify-center text-[#0A2C56]/70">
             No payment data available
           </div>
         )}

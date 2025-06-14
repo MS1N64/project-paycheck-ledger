@@ -52,7 +52,7 @@ const Analytics = () => {
           <Button
             onClick={() => navigate("/")}
             variant="outline"
-            className="mb-4 border-slate-300 text-slate-700 hover:bg-slate-100"
+            className="mb-4 bg-[#F5F7FA] border-[#E3E8EF] text-[#0A2C56] hover:bg-[#E3E8EF] hover:text-[#0A2C56]"
           >
             <ArrowLeft className="h-4 w-4 mr-2" />
             Back to Dashboard

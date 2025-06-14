@@ -27,14 +27,14 @@ const OutstandingDebtChart = ({ projects }: OutstandingDebtChartProps) => {
   const chartConfig = {
     debt: {
       label: "Outstanding Debt",
-      color: "hsl(25, 95%, 53%)",
+      color: "hsl(25, 95%, 53%)", // Orange instead of yellow
     },
   };
 
   return (
-    <Card className="border-slate-200">
+    <Card className="border-slate-200 bg-[#F5F7FA]">
       <CardHeader>
-        <CardTitle className="text-slate-800">Outstanding Debt Over Time</CardTitle>
+        <CardTitle className="text-[#0A2C56]">Outstanding Debt Over Time</CardTitle>
       </CardHeader>
       <CardContent>
         {chartData.length > 0 ? (
@@ -67,7 +67,7 @@ const OutstandingDebtChart = ({ projects }: OutstandingDebtChartProps) => {
             </LineChart>
           </ChartContainer>
         ) : (
-          <div className="h-[300px] flex items-center justify-center text-slate-500">
+          <div className="h-[300px] flex items-center justify-center text-[#0A2C56]/70">
             No project data available
           </div>
         )}

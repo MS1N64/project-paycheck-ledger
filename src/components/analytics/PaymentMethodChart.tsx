@@ -40,9 +40,9 @@ const PaymentMethodChart = ({ payments }: PaymentMethodChartProps) => {
   };
 
   return (
-    <Card className="border-slate-200">
+    <Card className="border-slate-200 bg-[#F5F7FA]">
       <CardHeader>
-        <CardTitle className="text-slate-800">Payment Method Breakdown</CardTitle>
+        <CardTitle className="text-[#0A2C56]">Payment Method Breakdown</CardTitle>
       </CardHeader>
       <CardContent>
         {chartData.length > 0 ? (
@@ -79,7 +79,7 @@ const PaymentMethodChart = ({ payments }: PaymentMethodChartProps) => {
             </PieChart>
           </ChartContainer>
         ) : (
-          <div className="h-[300px] flex items-center justify-center text-slate-500">
+          <div className="h-[300px] flex items-center justify-center text-[#0A2C56]/70">
             No payment data available
           </div>
         )}
