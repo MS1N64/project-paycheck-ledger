@@ -26,7 +26,7 @@ export class CloudSyncService {
         created_at: project.createdAt
       }));
 
-      const { error } = await supabase
+      const { error } = await (supabase as any)
         .from('projects')
         .upsert(projectsToSync, { onConflict: 'id' });
 
@@ -40,7 +40,7 @@ export class CloudSyncService {
 
   static async syncProjectsFromCloud(userId: string): Promise<Project[]> {
     try {
-      const { data, error } = await supabase
+      const { data, error } = await (supabase as any)
         .from('projects')
         .select('*')
         .eq('user_id', userId);
@@ -48,7 +48,7 @@ export class CloudSyncService {
       if (error) throw error;
 
       // Transform from database schema to app schema
-      return (data || []).map(project => ({
+      return (data || []).map((project: any) => ({
         id: project.id,
         address: project.address,
         finalPrice: project.final_price,
@@ -89,7 +89,7 @@ export class CloudSyncService {
         created_at: payment.createdAt
       }));
 
-      const { error } = await supabase
+      const { error } = await (supabase as any)
         .from('payments')
         .upsert(paymentsToSync, { onConflict: 'id' });
 
@@ -103,14 +103,14 @@ export class CloudSyncService {
 
   static async syncPaymentsFromCloud(userId: string): Promise<Payment[]> {
     try {
-      const { data, error } = await supabase
+      const { data, error } = await (supabase as any)
         .from('payments')
         .select('*')
         .eq('user_id', userId);
 
       if (error) throw error;
 
-      return (data || []).map(payment => ({
+      return (data || []).map((payment: any) => ({
         id: payment.id,
         projectId: payment.project_id,
         stage: payment.stage,
