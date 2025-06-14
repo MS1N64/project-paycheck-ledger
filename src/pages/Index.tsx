@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import ProjectForm from "@/components/ProjectForm";
@@ -246,7 +247,7 @@ const Index = () => {
               <AlertDialogCancel className="w-full sm:w-auto border-slate-grey/30 text-slate-grey hover:bg-slate-grey/10">Cancel</AlertDialogCancel>
               <AlertDialogAction 
                 onClick={confirmDeleteProject}
-                className="w-full sm:w-auto bg-amber-600 text-white hover:bg-amber-700"
+                className="w-full sm:w-auto bg-destructive text-destructive-foreground hover:bg-destructive/90"
               >
                 Move to Recycle Bin
               </AlertDialogAction>
