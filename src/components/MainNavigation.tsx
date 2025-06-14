@@ -69,8 +69,8 @@ const MainNavigation = () => {
           to={item.href}
           onClick={onItemClick}
           className={cn(
-            "block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-slate-100 dark:hover:bg-slate-700 hover:text-slate-900 dark:hover:text-slate-100 focus:bg-slate-100 dark:focus:bg-slate-700 focus:text-slate-900 dark:focus:text-slate-100",
-            location.pathname === item.href && "bg-slate-100 dark:bg-slate-700 text-slate-900 dark:text-slate-100"
+            "block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-[#F5F7FA] dark:hover:bg-slate-700 hover:text-[#0A2C56] dark:hover:text-slate-100 focus:bg-[#F5F7FA] dark:focus:bg-slate-700 focus:text-[#0A2C56] dark:focus:text-slate-100",
+            location.pathname === item.href && "bg-[#F5F7FA] dark:bg-slate-700 text-[#0A2C56] dark:text-slate-100"
           )}
         >
           <div className="flex items-center gap-2">
@@ -89,7 +89,7 @@ const MainNavigation = () => {
     return (
       <Sheet open={open} onOpenChange={setOpen}>
         <SheetTrigger asChild>
-          <Button variant="outline" size="sm" className="md:hidden">
+          <Button variant="outline" size="sm" className="md:hidden bg-[#F5F7FA] border-[#F5F7FA] text-[#0A2C56] hover:bg-[#F5F7FA]/80">
             <Menu className="h-4 w-4 mr-2" />
             Menu
           </Button>
@@ -118,7 +118,7 @@ const MainNavigation = () => {
     <NavigationMenu className="hidden md:flex">
       <NavigationMenuList>
         <NavigationMenuItem>
-          <NavigationMenuTrigger className="bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300">
+          <NavigationMenuTrigger className="bg-[#F5F7FA] dark:bg-slate-800 text-[#0A2C56] dark:text-slate-300 hover:bg-[#F5F7FA]/80">
             <img 
               src="/lovable-uploads/66268146-2321-41b8-880e-efc8cb74bbfb.png"
               alt="Dass & Sons Ltd"
