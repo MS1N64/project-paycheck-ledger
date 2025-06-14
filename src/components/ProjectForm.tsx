@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -55,7 +56,6 @@ const ProjectForm = ({ onSubmit, onCancel, initialData }: ProjectFormProps) => {
                 id="address"
                 value={formData.address}
                 onChange={(e) => setFormData({...formData, address: e.target.value})}
-                placeholder="e.g., 43 Higher Swan Lane, BL3 3AJ"
                 required
                 className="border-slate-300 focus:border-slate-500"
               />
@@ -80,7 +80,6 @@ const ProjectForm = ({ onSubmit, onCancel, initialData }: ProjectFormProps) => {
                   step="0.01"
                   value={formData.finalPrice}
                   onChange={(e) => setFormData({...formData, finalPrice: e.target.value})}
-                  placeholder="134400.00"
                   required
                   className="flex-1 border-slate-300 focus:border-slate-500"
                 />
@@ -125,7 +124,6 @@ const ProjectForm = ({ onSubmit, onCancel, initialData }: ProjectFormProps) => {
                   id="clientName"
                   value={formData.clientName}
                   onChange={(e) => setFormData({...formData, clientName: e.target.value})}
-                  placeholder="John Smith"
                   className="border-slate-300 focus:border-slate-500"
                 />
               </div>
@@ -136,7 +134,6 @@ const ProjectForm = ({ onSubmit, onCancel, initialData }: ProjectFormProps) => {
                   type="email"
                   value={formData.clientEmail}
                   onChange={(e) => setFormData({...formData, clientEmail: e.target.value})}
-                  placeholder="john@example.com"
                   className="border-slate-300 focus:border-slate-500"
                 />
               </div>
@@ -146,7 +143,6 @@ const ProjectForm = ({ onSubmit, onCancel, initialData }: ProjectFormProps) => {
                   id="clientPhone"
                   value={formData.clientPhone}
                   onChange={(e) => setFormData({...formData, clientPhone: e.target.value})}
-                  placeholder="07123 456789"
                   className="border-slate-300 focus:border-slate-500"
                 />
               </div>
@@ -156,7 +152,6 @@ const ProjectForm = ({ onSubmit, onCancel, initialData }: ProjectFormProps) => {
                   id="clientAddress"
                   value={formData.clientAddress}
                   onChange={(e) => setFormData({...formData, clientAddress: e.target.value})}
-                  placeholder="Client address"
                   className="border-slate-300 focus:border-slate-500"
                 />
               </div>
@@ -169,7 +164,6 @@ const ProjectForm = ({ onSubmit, onCancel, initialData }: ProjectFormProps) => {
               id="notes"
               value={formData.notes}
               onChange={(e) => setFormData({...formData, notes: e.target.value})}
-              placeholder="Additional project details, special requirements, etc."
               className="border-slate-300 focus:border-slate-500"
             />
           </div>
