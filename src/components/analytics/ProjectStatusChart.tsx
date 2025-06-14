@@ -17,8 +17,6 @@ const ProjectStatusChart = ({ projects }: ProjectStatusChartProps) => {
   const chartData = Object.entries(statusData).map(([status, count]) => ({
     status,
     count,
-    color: status === "Completed" ? "#10b981" : 
-           status === "In Progress" ? "#3b82f6" : "#f59e0b"
   }));
 
   const chartConfig = {
@@ -53,7 +51,7 @@ const ProjectStatusChart = ({ projects }: ProjectStatusChartProps) => {
               <ChartTooltip content={<ChartTooltipContent />} />
               <Bar 
                 dataKey="count" 
-                fill={(entry) => `var(--color-${entry.status.replace(' ', '')})`}
+                fill="hsl(221, 83%, 53%)"
                 radius={4}
               />
             </BarChart>
