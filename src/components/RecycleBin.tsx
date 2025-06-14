@@ -3,7 +3,7 @@ import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { RestoreIcon, Trash2, RotateCcw } from "lucide-react";
+import { RotateCcw, Trash2 } from "lucide-react";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -108,7 +108,7 @@ const RecycleBin = ({ deletedProjects, onRestoreProject, onPermanentDelete }: Re
                   className="flex-1 border-emerald-300 dark:border-emerald-600 text-emerald-700 dark:text-emerald-300 hover:bg-emerald-100 dark:hover:bg-emerald-800"
                   onClick={() => onRestoreProject(project.id)}
                 >
-                  <RestoreIcon className="h-4 w-4 mr-1" />
+                  <RotateCcw className="h-4 w-4 mr-1" />
                   Restore
                 </Button>
                 <Button

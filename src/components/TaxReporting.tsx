@@ -1,15 +1,16 @@
-
 import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Calculator, Download, FileText } from "lucide-react";
+import { Project, Payment } from "@/types";
 
 interface TaxReportingProps {
-  payments: any[];
+  projects: Project[];
+  payments: Payment[];
 }
 
-const TaxReporting = ({ payments }: TaxReportingProps) => {
+const TaxReporting = ({ projects, payments }: TaxReportingProps) => {
   const [selectedYear, setSelectedYear] = useState(new Date().getFullYear().toString());
   const [taxSummary, setTaxSummary] = useState({
     totalInvoiced: 0,
