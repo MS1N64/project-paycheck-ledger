@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import ProjectForm from "@/components/ProjectForm";
@@ -79,36 +78,46 @@ const Index = () => {
   };
 
   const handleCreateProject = (project: Project) => {
+    let updatedProjects;
+    let optimisticProject = project;
+    
+    if (editingProject) {
+      // For editing, keep the existing ID
+      updatedProjects = projects.map(p => p.id === editingProject.id ? project : p);
+    } else {
+      // For new projects, ensure unique ID to prevent collisions
+      const uniqueId = ensureUniqueProjectId(projects, project.id);
+      optimisticProject = { ...project, id: uniqueId };
+      updatedProjects = [...projects, optimisticProject];
+      
+      console.log(`Creating new project with unique ID: ${uniqueId}`);
+    }
+    
+    // Optimistic UI update - immediately update the UI state
+    setProjects(updatedProjects);
+    setFilteredProjects(updatedProjects);
+    setShowProjectForm(false);
+    setEditingProject(null);
+    
+    // Show immediate success feedback
+    toast({
+      title: editingProject ? "Project Updated" : "Project Created",
+      description: `${project.address} has been ${editingProject ? "updated" : "created"} successfully.`,
+    });
+    
+    // Attempt to save to storage in the background
     try {
-      let updatedProjects;
-      
-      if (editingProject) {
-        // For editing, keep the existing ID
-        updatedProjects = projects.map(p => p.id === editingProject.id ? project : p);
-      } else {
-        // For new projects, ensure unique ID to prevent collisions
-        const uniqueId = ensureUniqueProjectId(projects, project.id);
-        const projectWithUniqueId = { ...project, id: uniqueId };
-        updatedProjects = [...projects, projectWithUniqueId];
-        
-        console.log(`Creating new project with unique ID: ${uniqueId}`);
-      }
-      
-      setProjects(updatedProjects);
-      setFilteredProjects(updatedProjects);
       SecureStorage.setItem("projects", updatedProjects);
-      setShowProjectForm(false);
-      setEditingProject(null);
-      
-      toast({
-        title: editingProject ? "Project Updated" : "Project Created",
-        description: `${project.address} has been ${editingProject ? "updated" : "created"} successfully.`,
-      });
     } catch (error) {
       console.error('Failed to save project:', error);
+      
+      // Revert optimistic update on failure
+      setProjects(projects);
+      setFilteredProjects(projects);
+      
       toast({
         title: "Save Error",
-        description: "Failed to save project. Please try again.",
+        description: "Failed to save project. Changes have been reverted.",
         variant: "destructive"
       });
     }
