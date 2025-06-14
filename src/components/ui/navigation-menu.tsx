@@ -1,3 +1,4 @@
+
 import * as React from "react"
 import * as NavigationMenuPrimitive from "@radix-ui/react-navigation-menu"
 import { cva } from "class-variance-authority"
@@ -41,7 +42,7 @@ NavigationMenuList.displayName = NavigationMenuPrimitive.List.displayName
 const NavigationMenuItem = NavigationMenuPrimitive.Item
 
 const navigationMenuTriggerStyle = cva(
-  "group inline-flex h-10 w-max items-center justify-center rounded-md bg-[#F5F7FA] dark:bg-slate-800 px-4 py-2 text-sm font-medium transition-colors hover:bg-[#F5F7FA]/80 hover:text-[#0A2C56] focus:bg-[#F5F7FA] focus:text-[#0A2C56] focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-[#F5F7FA]/50 data-[state=open]:bg-[#F5F7FA]/50 text-[#0A2C56] dark:text-slate-300"
+  "group inline-flex h-10 w-max items-center justify-center rounded-md bg-[#F5F7FA] dark:bg-slate-800 px-4 py-2 text-sm font-medium transition-colors hover:bg-[#E3E8EF] hover:text-[#0A2C56] focus:bg-[#E3E8EF] focus:text-[#0A2C56] focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-[#E3E8EF] data-[state=open]:bg-[#E3E8EF] text-[#0A2C56] dark:text-slate-300 border border-[#E3E8EF] dark:border-slate-700"
 )
 
 const NavigationMenuTrigger = React.forwardRef<
@@ -86,7 +87,7 @@ const NavigationMenuViewport = React.forwardRef<
   <div className={cn("absolute left-0 top-full flex justify-center")}>
     <NavigationMenuPrimitive.Viewport
       className={cn(
-        "origin-top-center relative mt-1.5 h-[var(--radix-navigation-menu-viewport-height)] w-full overflow-hidden rounded-md border bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-[#0A2C56] dark:text-slate-100 shadow-lg data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-90 md:w-[var(--radix-navigation-menu-viewport-width)]",
+        "origin-top-center relative mt-1.5 h-[var(--radix-navigation-menu-viewport-height)] w-full overflow-hidden rounded-md border bg-[#F5F7FA] dark:bg-slate-800 border-[#E3E8EF] dark:border-slate-700 text-[#0A2C56] dark:text-slate-100 shadow-lg data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-90 md:w-[var(--radix-navigation-menu-viewport-width)]",
         className
       )}
       ref={ref}

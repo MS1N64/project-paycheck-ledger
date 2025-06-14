@@ -69,8 +69,8 @@ const MainNavigation = () => {
           to={item.href}
           onClick={onItemClick}
           className={cn(
-            "block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-[#F5F7FA] dark:hover:bg-slate-700 hover:text-[#0A2C56] dark:hover:text-slate-100 focus:bg-[#F5F7FA] dark:focus:bg-slate-700 focus:text-[#0A2C56] dark:focus:text-slate-100",
-            location.pathname === item.href && "bg-[#F5F7FA] dark:bg-slate-700 text-[#0A2C56] dark:text-slate-100"
+            "block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-[#E3E8EF] dark:hover:bg-slate-700 hover:text-[#0A2C56] dark:hover:text-slate-100 focus:bg-[#E3E8EF] dark:focus:bg-slate-700 focus:text-[#0A2C56] dark:focus:text-slate-100",
+            location.pathname === item.href && "bg-[#E3E8EF] dark:bg-slate-700 text-[#0A2C56] dark:text-slate-100 border border-[#0A2C56]/20 shadow-sm"
           )}
         >
           <div className="flex items-center gap-2">
@@ -89,14 +89,14 @@ const MainNavigation = () => {
     return (
       <Sheet open={open} onOpenChange={setOpen}>
         <SheetTrigger asChild>
-          <Button variant="outline" size="sm" className="md:hidden bg-[#F5F7FA] border-[#F5F7FA] text-[#0A2C56] hover:bg-[#F5F7FA]/80">
+          <Button variant="outline" size="sm" className="md:hidden bg-[#F5F7FA] border-[#E3E8EF] text-[#0A2C56] hover:bg-[#E3E8EF]">
             <Menu className="h-4 w-4 mr-2" />
             Menu
           </Button>
         </SheetTrigger>
-        <SheetContent side="left" className="w-[300px] sm:w-[400px]">
+        <SheetContent side="left" className="w-[300px] sm:w-[400px] bg-[#F5F7FA] border-[#E3E8EF]">
           <SheetHeader>
-            <SheetTitle className="flex items-center gap-2">
+            <SheetTitle className="flex items-center gap-2 text-[#0A2C56]">
               <img 
                 src="/lovable-uploads/66268146-2321-41b8-880e-efc8cb74bbfb.png"
                 alt="Dass & Sons Ltd"
@@ -104,7 +104,7 @@ const MainNavigation = () => {
               />
               Navigation
             </SheetTitle>
-            <SheetDescription>
+            <SheetDescription className="text-[#0A2C56]/70">
               Navigate to different sections of your project dashboard
             </SheetDescription>
           </SheetHeader>
@@ -118,7 +118,7 @@ const MainNavigation = () => {
     <NavigationMenu className="hidden md:flex">
       <NavigationMenuList>
         <NavigationMenuItem>
-          <NavigationMenuTrigger className="bg-[#F5F7FA] dark:bg-slate-800 text-[#0A2C56] dark:text-slate-300 hover:bg-[#F5F7FA]/80">
+          <NavigationMenuTrigger className="bg-[#F5F7FA] dark:bg-slate-800 text-[#0A2C56] dark:text-slate-300 hover:bg-[#E3E8EF] border border-[#E3E8EF]">
             <img 
               src="/lovable-uploads/66268146-2321-41b8-880e-efc8cb74bbfb.png"
               alt="Dass & Sons Ltd"
@@ -127,7 +127,7 @@ const MainNavigation = () => {
             Navigation
           </NavigationMenuTrigger>
           <NavigationMenuContent>
-            <div className="w-[400px] bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
+            <div className="w-[400px] bg-[#F5F7FA] dark:bg-slate-800 border border-[#E3E8EF] dark:border-slate-700">
               <NavigationLinks />
             </div>
           </NavigationMenuContent>
