@@ -1,6 +1,6 @@
 
 import { Button } from "@/components/ui/button";
-import { Plus, Cloud, Shield, Search } from "lucide-react";
+import { Plus, Cloud, Shield, Search, BarChart3 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 interface DashboardHeaderProps {
@@ -18,6 +18,14 @@ const DashboardHeader = ({ onCreateProject, onShowCloudSync }: DashboardHeaderPr
         <p className="text-slate-600 mt-1">Manage your construction projects and payments</p>
       </div>
       <div className="flex gap-2">
+        <Button
+          onClick={() => navigate("/analytics")}
+          variant="outline"
+          className="border-slate-300 text-slate-700 hover:bg-slate-100"
+        >
+          <BarChart3 className="h-4 w-4 mr-2" />
+          Analytics
+        </Button>
         <Button
           onClick={() => navigate("/search")}
           variant="outline"
