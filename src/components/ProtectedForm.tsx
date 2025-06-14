@@ -1,4 +1,3 @@
-
 import { useState, ReactNode, useRef } from 'react';
 import HCaptcha from './HCaptcha';
 import { useCaptchaVerification } from '@/hooks/useCaptchaVerification';
@@ -14,8 +13,8 @@ interface ProtectedFormProps {
   className?: string;
 }
 
-// Using the correct hCaptcha site key for testing
-const HCAPTCHA_SITE_KEY = '10000000-ffff-ffff-ffff-000000000001';
+// Using your real hCaptcha site key
+const HCAPTCHA_SITE_KEY = '0732bed2-e24c-4466-8ca8-36dc71782aac';
 
 const ProtectedForm = ({ children, onVerified, action, className = '' }: ProtectedFormProps) => {
   const [isVerified, setIsVerified] = useState(false);
