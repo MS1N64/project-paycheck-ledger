@@ -33,8 +33,8 @@ const BrandHeader = ({ showSlogan = true, size = "md", forceSecondaryLogo = fals
   };
 
   const logoSrc = usePrimaryLogo 
-    ? "/lovable-uploads/66268146-2321-41b8-880e-efc8cb74bbfb.png"
-    : "/lovable-uploads/79c8de50-64f1-4119-8e64-d4e6942d87fd.png";
+    ? "/lovable-uploads/79c8de50-64f1-4119-8e64-d4e6942d87fd.png"
+    : "/lovable-uploads/66268146-2321-41b8-880e-efc8cb74bbfb.png";
 
   return (
     <div className="flex items-center gap-3">

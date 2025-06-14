@@ -98,7 +98,7 @@ const MainNavigation = () => {
           <SheetHeader>
             <SheetTitle className="flex items-center gap-2">
               <img 
-                src="/lovable-uploads/79c8de50-64f1-4119-8e64-d4e6942d87fd.png"
+                src="/lovable-uploads/66268146-2321-41b8-880e-efc8cb74bbfb.png"
                 alt="Dass & Sons Ltd"
                 className="h-5 w-5 object-contain"
               />
@@ -120,7 +120,7 @@ const MainNavigation = () => {
         <NavigationMenuItem>
           <NavigationMenuTrigger className="bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300">
             <img 
-              src="/lovable-uploads/79c8de50-64f1-4119-8e64-d4e6942d87fd.png"
+              src="/lovable-uploads/66268146-2321-41b8-880e-efc8cb74bbfb.png"
               alt="Dass & Sons Ltd"
               className="h-4 w-4 mr-2 object-contain"
             />
