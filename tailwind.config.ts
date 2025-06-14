@@ -1,3 +1,4 @@
+
 import type { Config } from "tailwindcss";
 
 export default {
@@ -18,6 +19,10 @@ export default {
 			}
 		},
 		extend: {
+			fontFamily: {
+				'inter': ['Inter', 'sans-serif'],
+				'roboto': ['Roboto', 'sans-serif'],
+			},
 			colors: {
 				border: 'hsl(var(--border))',
 				input: 'hsl(var(--input))',
@@ -35,6 +40,10 @@ export default {
 				destructive: {
 					DEFAULT: 'hsl(var(--destructive))',
 					foreground: 'hsl(var(--destructive-foreground))'
+				},
+				success: {
+					DEFAULT: 'hsl(var(--success))',
+					foreground: 'hsl(var(--success-foreground))'
 				},
 				muted: {
 					DEFAULT: 'hsl(var(--muted))',
@@ -61,6 +70,18 @@ export default {
 					'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
+				},
+				// Brand-specific colors
+				'dass-blue': {
+					DEFAULT: '#003366',
+					dark: '#002244',
+					light: '#004080'
+				},
+				'slate-grey': '#4A4A4A',
+				'soft-white': '#F9F9F9',
+				'accent-gold': {
+					DEFAULT: '#FFD700',
+					dark: '#e6c200'
 				}
 			},
 			borderRadius: {
@@ -84,11 +105,32 @@ export default {
 					to: {
 						height: '0'
 					}
+				},
+				'dass-spin': {
+					'0%': { 
+						transform: 'rotate(0deg)',
+						borderColor: '#003366 transparent #FFD700 transparent'
+					},
+					'25%': { 
+						borderColor: '#FFD700 #003366 transparent transparent'
+					},
+					'50%': { 
+						transform: 'rotate(180deg)',
+						borderColor: 'transparent #FFD700 #003366 transparent'
+					},
+					'75%': { 
+						borderColor: 'transparent transparent #FFD700 #003366'
+					},
+					'100%': { 
+						transform: 'rotate(360deg)',
+						borderColor: '#003366 transparent #FFD700 transparent'
+					}
 				}
 			},
 			animation: {
 				'accordion-down': 'accordion-down 0.2s ease-out',
-				'accordion-up': 'accordion-up 0.2s ease-out'
+				'accordion-up': 'accordion-up 0.2s ease-out',
+				'dass-spin': 'dass-spin 1s linear infinite'
 			}
 		}
 	},

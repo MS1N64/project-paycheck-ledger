@@ -206,7 +206,7 @@ const Index = () => {
   const projectToDeleteData = activeProjects.find(p => p.id === projectToDelete);
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-slate-900">
+    <div className="min-h-screen bg-soft-white dark:bg-slate-900">
       <div className="container mx-auto px-3 sm:px-4 py-4 sm:py-8">
         <DashboardHeader onCreateProject={handleShowProjectForm} />
 
@@ -221,7 +221,7 @@ const Index = () => {
         />
 
         <Dialog open={showProjectForm} onOpenChange={setShowProjectForm}>
-          <DialogContent className="max-w-4xl max-h-[95vh] w-[95vw] sm:w-full overflow-y-auto p-3 sm:p-6">
+          <DialogContent className="max-w-4xl max-h-[95vh] w-[95vw] sm:w-full overflow-y-auto p-3 sm:p-6 bg-white border-slate-grey/20">
             <ProjectForm
               onSubmit={handleCreateProject}
               onCancel={() => {
@@ -234,16 +234,16 @@ const Index = () => {
         </Dialog>
 
         <AlertDialog open={!!projectToDelete} onOpenChange={() => setProjectToDelete(null)}>
-          <AlertDialogContent className="w-[95vw] max-w-md">
+          <AlertDialogContent className="w-[95vw] max-w-md bg-white border-slate-grey/20">
             <AlertDialogHeader>
-              <AlertDialogTitle>Move to Recycle Bin</AlertDialogTitle>
-              <AlertDialogDescription>
+              <AlertDialogTitle className="text-slate-grey font-inter">Move to Recycle Bin</AlertDialogTitle>
+              <AlertDialogDescription className="text-slate-grey/70 font-roboto">
                 Are you sure you want to move "{projectToDeleteData?.address}" to the recycle bin? 
                 You can restore it later from the recycle bin.
               </AlertDialogDescription>
             </AlertDialogHeader>
             <AlertDialogFooter className="flex-col sm:flex-row gap-2">
-              <AlertDialogCancel className="w-full sm:w-auto">Cancel</AlertDialogCancel>
+              <AlertDialogCancel className="w-full sm:w-auto border-slate-grey/30 text-slate-grey hover:bg-slate-grey/10">Cancel</AlertDialogCancel>
               <AlertDialogAction 
                 onClick={confirmDeleteProject}
                 className="w-full sm:w-auto bg-amber-600 text-white hover:bg-amber-700"
