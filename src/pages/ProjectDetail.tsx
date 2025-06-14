@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -18,6 +17,7 @@ const ProjectDetail = () => {
   const [project, setProject] = useState<any>(null);
   const [payments, setPayments] = useState<any[]>([]);
   const [showPaymentForm, setShowPaymentForm] = useState(false);
+  const [deletedItems, setDeletedItems] = useState<Map<string, { item: any; type: 'payment' | 'project'; timestamp: number }>>(new Map());
 
   useEffect(() => {
     const projects = JSON.parse(localStorage.getItem("projects") || "[]");
@@ -31,66 +31,166 @@ const ProjectDetail = () => {
     setPayments(projectPayments);
   }, [id]);
 
-  const handleAddPayment = (payment: any) => {
-    const allPayments = JSON.parse(localStorage.getItem("payments") || "[]");
-    const updatedPayments = [...allPayments, payment];
-    localStorage.setItem("payments", JSON.stringify(updatedPayments));
-    setPayments(prev => [...prev, payment]);
-    
-    // Update project totals
+  const updateProjectTotals = (newPayments: any[]) => {
     const projects = JSON.parse(localStorage.getItem("projects") || "[]");
     const updatedProjects = projects.map((p: any) => {
       if (p.id === id) {
-        const totalReceived = updatedPayments
+        const totalReceived = newPayments
           .filter((pay: any) => pay.projectId === id)
           .reduce((sum: number, pay: any) => sum + pay.total, 0);
         return {
           ...p,
           totalReceived,
           totalRemaining: p.finalPrice - totalReceived,
-          lastPayment: new Date().toLocaleDateString()
+          lastPayment: newPayments.length > 0 ? new Date().toLocaleDateString() : p.lastPayment
         };
       }
       return p;
     });
     localStorage.setItem("projects", JSON.stringify(updatedProjects));
     setProject(updatedProjects.find((p: any) => p.id === id));
-    
-    setShowPaymentForm(false);
-    toast({
-      title: "Payment Added",
-      description: "Payment has been successfully recorded.",
-    });
   };
 
-  const handleDeletePayment = (paymentId: string) => {
-    const allPayments = JSON.parse(localStorage.getItem("payments") || "[]");
-    const updatedPayments = allPayments.filter((p: any) => p.id !== paymentId);
-    localStorage.setItem("payments", JSON.stringify(updatedPayments));
-    setPayments(prev => prev.filter(p => p.id !== paymentId));
-    
-    // Update project totals
-    const projects = JSON.parse(localStorage.getItem("projects") || "[]");
-    const updatedProjects = projects.map((p: any) => {
-      if (p.id === id) {
-        const totalReceived = updatedPayments
-          .filter((pay: any) => pay.projectId === id)
-          .reduce((sum: number, pay: any) => sum + pay.total, 0);
-        return {
-          ...p,
-          totalReceived,
-          totalRemaining: p.finalPrice - totalReceived
-        };
-      }
-      return p;
+  const handleAddPayment = async (payment: any) => {
+    // Optimistic update - add payment immediately to UI
+    const optimisticPayments = [...payments, payment];
+    setPayments(optimisticPayments);
+    updateProjectTotals(optimisticPayments);
+    setShowPaymentForm(false);
+
+    try {
+      // Simulate API call delay
+      await new Promise(resolve => setTimeout(resolve, 500));
+      
+      // Persist to localStorage (simulating successful API call)
+      const allPayments = JSON.parse(localStorage.getItem("payments") || "[]");
+      const updatedPayments = [...allPayments, payment];
+      localStorage.setItem("payments", JSON.stringify(updatedPayments));
+      
+      toast({
+        title: "Payment Added",
+        description: "Payment has been successfully recorded.",
+      });
+    } catch (error) {
+      // Revert optimistic update on failure
+      setPayments(payments);
+      updateProjectTotals(payments);
+      
+      toast({
+        title: "Error",
+        description: "Failed to add payment. Please try again.",
+        variant: "destructive"
+      });
+    }
+  };
+
+  const handleDeletePayment = async (paymentId: string) => {
+    const paymentToDelete = payments.find(p => p.id === paymentId);
+    if (!paymentToDelete) return;
+
+    // Optimistic update - remove payment immediately from UI
+    const optimisticPayments = payments.filter(p => p.id !== paymentId);
+    setPayments(optimisticPayments);
+    updateProjectTotals(optimisticPayments);
+
+    // Store deleted item for potential undo
+    const deletedItem = {
+      item: paymentToDelete,
+      type: 'payment' as const,
+      timestamp: Date.now()
+    };
+    setDeletedItems(prev => new Map(prev).set(paymentId, deletedItem));
+
+    try {
+      // Simulate API call delay
+      await new Promise(resolve => setTimeout(resolve, 300));
+      
+      // Persist deletion to localStorage
+      const allPayments = JSON.parse(localStorage.getItem("payments") || "[]");
+      const updatedPayments = allPayments.filter((p: any) => p.id !== paymentId);
+      localStorage.setItem("payments", JSON.stringify(updatedPayments));
+      
+      toast({
+        title: "Payment Deleted",
+        description: "Payment has been removed.",
+        action: (
+          <Button
+            size="sm"
+            variant="outline"
+            onClick={() => handleUndoDelete(paymentId)}
+            className="ml-2"
+          >
+            Undo
+          </Button>
+        )
+      });
+
+      // Auto-cleanup undo option after 10 seconds
+      setTimeout(() => {
+        setDeletedItems(prev => {
+          const newMap = new Map(prev);
+          newMap.delete(paymentId);
+          return newMap;
+        });
+      }, 10000);
+      
+    } catch (error) {
+      // Revert optimistic update on failure
+      setPayments(payments);
+      updateProjectTotals(payments);
+      setDeletedItems(prev => {
+        const newMap = new Map(prev);
+        newMap.delete(paymentId);
+        return newMap;
+      });
+      
+      toast({
+        title: "Error",
+        description: "Failed to delete payment. Please try again.",
+        variant: "destructive"
+      });
+    }
+  };
+
+  const handleUndoDelete = async (itemId: string) => {
+    const deletedItem = deletedItems.get(itemId);
+    if (!deletedItem || deletedItem.type !== 'payment') return;
+
+    // Restore payment optimistically
+    const restoredPayments = [...payments, deletedItem.item];
+    setPayments(restoredPayments);
+    updateProjectTotals(restoredPayments);
+
+    // Remove from deleted items
+    setDeletedItems(prev => {
+      const newMap = new Map(prev);
+      newMap.delete(itemId);
+      return newMap;
     });
-    localStorage.setItem("projects", JSON.stringify(updatedProjects));
-    setProject(updatedProjects.find((p: any) => p.id === id));
-    
-    toast({
-      title: "Payment Deleted",
-      description: "Payment has been removed.",
-    });
+
+    try {
+      // Persist restoration to localStorage
+      const allPayments = JSON.parse(localStorage.getItem("payments") || "[]");
+      const updatedPayments = [...allPayments, deletedItem.item];
+      localStorage.setItem("payments", JSON.stringify(updatedPayments));
+      
+      toast({
+        title: "Payment Restored",
+        description: "Payment has been restored successfully.",
+      });
+    } catch (error) {
+      // Revert if restoration fails
+      const revertedPayments = payments.filter(p => p.id !== itemId);
+      setPayments(revertedPayments);
+      updateProjectTotals(revertedPayments);
+      setDeletedItems(prev => new Map(prev).set(itemId, deletedItem));
+      
+      toast({
+        title: "Error",
+        description: "Failed to restore payment. Please try again.",
+        variant: "destructive"
+      });
+    }
   };
 
   const exportToCSV = () => {
