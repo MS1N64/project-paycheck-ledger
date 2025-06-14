@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import ProjectForm from "@/components/ProjectForm";
@@ -5,6 +6,7 @@ import DashboardHeader from "@/components/DashboardHeader";
 import DashboardStats from "@/components/DashboardStats";
 import DashboardSidebar from "@/components/DashboardSidebar";
 import ProjectGrid from "@/components/ProjectGrid";
+import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { useToast } from "@/hooks/use-toast";
 import { SecureStorage } from "@/lib/dataIntegrity";
 import { ensureUniqueProjectId } from "@/lib/idGenerator";
@@ -167,8 +169,8 @@ const Index = () => {
           onFilterChange={handleFilterChange}
         />
 
-        {showProjectForm && (
-          <div className="mb-8">
+        <Dialog open={showProjectForm} onOpenChange={setShowProjectForm}>
+          <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
             <ProjectForm
               onSubmit={handleCreateProject}
               onCancel={() => {
@@ -177,8 +179,8 @@ const Index = () => {
               }}
               initialData={editingProject}
             />
-          </div>
-        )}
+          </DialogContent>
+        </Dialog>
 
         <ProjectGrid
           filteredProjects={filteredProjects}
