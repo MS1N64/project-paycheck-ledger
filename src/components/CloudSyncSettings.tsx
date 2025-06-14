@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -9,6 +8,7 @@ import { Cloud, CloudOff, Upload, Download, LogOut, RefreshCw } from "lucide-rea
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/hooks/useAuth";
 import AuthForm from "@/components/AuthForm";
+import ProtectedForm from "@/components/ProtectedForm";
 import { CloudSyncService } from "@/services/cloudSync";
 import { Project, Payment } from "@/types";
 import { SecureStorage } from "@/lib/dataIntegrity";
@@ -25,6 +25,7 @@ const CloudSyncSettings = ({ projects, payments, onDataSync }: CloudSyncSettings
   const [cloudSyncEnabled, setCloudSyncEnabled] = useState(false);
   const [showAuthDialog, setShowAuthDialog] = useState(false);
   const [syncing, setSyncing] = useState(false);
+  const [captchaToken, setCaptchaToken] = useState<string | null>(null);
 
   useEffect(() => {
     const savedCloudSyncEnabled = localStorage.getItem('cloudSyncEnabled') === 'true';
@@ -58,6 +59,11 @@ const CloudSyncSettings = ({ projects, payments, onDataSync }: CloudSyncSettings
 
     // Auto-sync after successful authentication
     setTimeout(() => handleSyncToCloud(), 1000);
+  };
+
+  const handleCaptchaVerified = (token: string) => {
+    console.log('Cloud sync captcha verified with token:', token ? 'received' : 'missing');
+    setCaptchaToken(token);
   };
 
   const handleSyncToCloud = async () => {
@@ -234,7 +240,9 @@ const CloudSyncSettings = ({ projects, payments, onDataSync }: CloudSyncSettings
 
       <Dialog open={showAuthDialog} onOpenChange={setShowAuthDialog}>
         <DialogContent className="max-w-md">
-          <AuthForm onAuthSuccess={handleAuthSuccess} />
+          <ProtectedForm onVerified={handleCaptchaVerified} action="cloud-sync" className="mb-6">
+            <AuthForm onAuthSuccess={handleAuthSuccess} captchaToken={captchaToken} />
+          </ProtectedForm>
         </DialogContent>
       </Dialog>
     </>
