@@ -34,8 +34,11 @@ const Index = () => {
   const [allPayments, setAllPayments] = useState<Payment[]>([]);
   const [projectToDelete, setProjectToDelete] = useState<string | null>(null);
 
-  // Use the custom hook for filtering
-  const { filteredProjects, handleFilterChange } = useProjectFilter(projects);
+  // Filter active projects only for the main grid
+  const activeProjects = projects.filter(p => !p.deletedAt);
+  
+  // Use the custom hook for filtering active projects only
+  const { filteredProjects, handleFilterChange } = useProjectFilter(activeProjects);
 
   useEffect(() => {
     try {
@@ -113,19 +116,18 @@ const Index = () => {
     if (!projectToDelete) return;
     
     try {
-      const updatedProjects = projects.filter(p => p.id !== projectToDelete);
+      // Soft delete: set deletedAt timestamp instead of removing
+      const updatedProjects = projects.map(p => 
+        p.id === projectToDelete 
+          ? { ...p, deletedAt: new Date().toISOString() }
+          : p
+      );
       setProjects(updatedProjects);
       SecureStorage.setItem("projects", updatedProjects);
       
-      // Also remove related payments
-      const payments = SecureStorage.getItem<Payment[]>("payments") || [];
-      const updatedPayments = payments.filter((p: Payment) => p.projectId !== projectToDelete);
-      SecureStorage.setItem("payments", updatedPayments);
-      setAllPayments(updatedPayments);
-      
       toast({
-        title: "Project Deleted",
-        description: "Project and all related payments have been removed.",
+        title: "Project Moved to Recycle Bin",
+        description: "Project has been moved to the recycle bin and can be restored.",
       });
     } catch (error) {
       toast({
@@ -138,6 +140,54 @@ const Index = () => {
     }
   };
 
+  const handleRestoreProject = (id: string) => {
+    try {
+      const updatedProjects = projects.map(p => 
+        p.id === id 
+          ? { ...p, deletedAt: undefined }
+          : p
+      );
+      setProjects(updatedProjects);
+      SecureStorage.setItem("projects", updatedProjects);
+      
+      toast({
+        title: "Project Restored",
+        description: "Project has been successfully restored from the recycle bin.",
+      });
+    } catch (error) {
+      toast({
+        title: "Restore Error",
+        description: "Failed to restore project. Please try again.",
+        variant: ToastVariant.DESTRUCTIVE
+      });
+    }
+  };
+
+  const handlePermanentDelete = (id: string) => {
+    try {
+      const updatedProjects = projects.filter(p => p.id !== id);
+      setProjects(updatedProjects);
+      SecureStorage.setItem("projects", updatedProjects);
+      
+      // Also remove related payments
+      const payments = SecureStorage.getItem<Payment[]>("payments") || [];
+      const updatedPayments = payments.filter((p: Payment) => p.projectId !== id);
+      SecureStorage.setItem("payments", updatedPayments);
+      setAllPayments(updatedPayments);
+      
+      toast({
+        title: "Project Permanently Deleted",
+        description: "Project and all related payments have been permanently removed.",
+      });
+    } catch (error) {
+      toast({
+        title: "Delete Error",
+        description: "Failed to permanently delete project. Please try again.",
+        variant: ToastVariant.DESTRUCTIVE
+      });
+    }
+  };
+
   const handleViewProject = (id: string) => {
     navigate(`/project/${id}`);
   };
@@ -146,18 +196,21 @@ const Index = () => {
     setShowProjectForm(true);
   };
 
-  const projectToDeleteData = projects.find(p => p.id === projectToDelete);
+  const projectToDeleteData = activeProjects.find(p => p.id === projectToDelete);
 
   return (
     <div className="min-h-screen bg-slate-50 dark:bg-slate-900">
       <div className="container mx-auto px-3 sm:px-4 py-4 sm:py-8">
         <DashboardHeader onCreateProject={handleShowProjectForm} />
 
-        <DashboardStats projects={projects} />
+        <DashboardStats projects={activeProjects} />
 
         <DashboardSidebar 
           projects={projects}
           allPayments={allPayments}
+          onFilterChange={handleFilterChange}
+          onRestoreProject={handleRestoreProject}
+          onPermanentDelete={handlePermanentDelete}
         />
 
         <Dialog open={showProjectForm} onOpenChange={setShowProjectForm}>
@@ -176,19 +229,19 @@ const Index = () => {
         <AlertDialog open={!!projectToDelete} onOpenChange={() => setProjectToDelete(null)}>
           <AlertDialogContent className="w-[95vw] max-w-md">
             <AlertDialogHeader>
-              <AlertDialogTitle>Delete Project</AlertDialogTitle>
+              <AlertDialogTitle>Move to Recycle Bin</AlertDialogTitle>
               <AlertDialogDescription>
-                Are you sure you want to delete "{projectToDeleteData?.address}"? 
-                This action cannot be undone and will also remove all related payments.
+                Are you sure you want to move "{projectToDeleteData?.address}" to the recycle bin? 
+                You can restore it later from the recycle bin.
               </AlertDialogDescription>
             </AlertDialogHeader>
             <AlertDialogFooter className="flex-col sm:flex-row gap-2">
               <AlertDialogCancel className="w-full sm:w-auto">Cancel</AlertDialogCancel>
               <AlertDialogAction 
                 onClick={confirmDeleteProject}
-                className="w-full sm:w-auto bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                className="w-full sm:w-auto bg-amber-600 text-white hover:bg-amber-700"
               >
-                Delete Project
+                Move to Recycle Bin
               </AlertDialogAction>
             </AlertDialogFooter>
           </AlertDialogContent>
@@ -196,7 +249,7 @@ const Index = () => {
 
         <ProjectGrid
           filteredProjects={filteredProjects}
-          projects={projects}
+          projects={activeProjects}
           onViewProject={handleViewProject}
           onEditProject={handleEditProject}
           onDeleteProject={handleDeleteProject}

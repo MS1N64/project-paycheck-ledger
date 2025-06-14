@@ -1,4 +1,3 @@
-
 export interface Project {
   id: string;
   address: string;
@@ -15,6 +14,7 @@ export interface Project {
   totalRemaining: number;
   lastPayment: string;
   createdAt: string;
+  deletedAt?: string;
 }
 
 export interface Payment {

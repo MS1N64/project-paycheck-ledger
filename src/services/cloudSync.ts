@@ -23,7 +23,8 @@ export class CloudSyncService {
         total_received: project.totalReceived,
         total_remaining: project.totalRemaining,
         last_payment: project.lastPayment,
-        created_at: project.createdAt
+        created_at: project.createdAt,
+        deleted_at: project.deletedAt || null
       }));
 
       const { error } = await (supabase as any)
@@ -63,7 +64,8 @@ export class CloudSyncService {
         totalReceived: project.total_received,
         totalRemaining: project.total_remaining,
         lastPayment: project.last_payment,
-        createdAt: project.created_at
+        createdAt: project.created_at,
+        deletedAt: project.deleted_at
       }));
     } catch (error) {
       console.error('Failed to sync projects from cloud:', error);
