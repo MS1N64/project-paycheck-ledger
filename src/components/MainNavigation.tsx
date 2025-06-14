@@ -19,7 +19,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { Link, useLocation } from "react-router-dom";
-import { BarChart3, Users, Database, Search, Home, Building, Menu } from "lucide-react";
+import { BarChart3, Users, Database, Search, Home, Menu } from "lucide-react";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { useState } from "react";
 
@@ -97,7 +97,11 @@ const MainNavigation = () => {
         <SheetContent side="left" className="w-[300px] sm:w-[400px]">
           <SheetHeader>
             <SheetTitle className="flex items-center gap-2">
-              <Building className="h-5 w-5" />
+              <img 
+                src="/lovable-uploads/79c8de50-64f1-4119-8e64-d4e6942d87fd.png"
+                alt="Dass & Sons Ltd"
+                className="h-5 w-5 object-contain"
+              />
               Navigation
             </SheetTitle>
             <SheetDescription>
@@ -115,7 +119,11 @@ const MainNavigation = () => {
       <NavigationMenuList>
         <NavigationMenuItem>
           <NavigationMenuTrigger className="bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300">
-            <Building className="h-4 w-4 mr-2" />
+            <img 
+              src="/lovable-uploads/79c8de50-64f1-4119-8e64-d4e6942d87fd.png"
+              alt="Dass & Sons Ltd"
+              className="h-4 w-4 mr-2 object-contain"
+            />
             Navigation
           </NavigationMenuTrigger>
           <NavigationMenuContent>

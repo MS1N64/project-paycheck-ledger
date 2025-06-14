@@ -18,9 +18,9 @@ const NotFound = () => {
   return (
     <div className="min-h-screen flex items-center justify-center bg-soft-white dark:bg-slate-900">
       <div className="text-center max-w-md mx-auto px-6">
-        {/* Brand header */}
+        {/* Brand header with secondary logo */}
         <div className="mb-8 flex justify-center">
-          <BrandHeader size="md" showSlogan={false} />
+          <BrandHeader size="md" showSlogan={false} forceSecondaryLogo={true} />
         </div>
         
         {/* Error icon */}
