@@ -21,6 +21,7 @@ import { useProjectFilter } from "@/hooks/useProjectFilter";
 import { SecureStorage } from "@/lib/dataIntegrity";
 import { ensureUniqueProjectId } from "@/lib/idGenerator";
 import { Project, Payment } from "@/types";
+import { ToastVariant } from "@/types/toast";
 
 const Index = () => {
   const navigate = useNavigate();
@@ -45,7 +46,7 @@ const Index = () => {
       toast({
         title: "Data Load Error",
         description: "Some data could not be loaded. Please check data integrity.",
-        variant: "destructive"
+        variant: ToastVariant.DESTRUCTIVE
       });
     }
   }, [toast]);
@@ -68,7 +69,6 @@ const Index = () => {
     
     // Optimistic UI update - immediately update the UI state
     setProjects(updatedProjects);
-    setFilteredProjects(updatedProjects);
     setShowProjectForm(false);
     setEditingProject(null);
     
@@ -86,12 +86,11 @@ const Index = () => {
       
       // Revert optimistic update on failure
       setProjects(projects);
-      setFilteredProjects(projects);
       
       toast({
         title: "Save Error",
         description: "Failed to save project. Changes have been reverted.",
-        variant: "destructive"
+        variant: ToastVariant.DESTRUCTIVE
       });
     }
   };
@@ -114,7 +113,6 @@ const Index = () => {
     try {
       const updatedProjects = projects.filter(p => p.id !== projectToDelete);
       setProjects(updatedProjects);
-      setFilteredProjects(updatedProjects);
       SecureStorage.setItem("projects", updatedProjects);
       
       // Also remove related payments
@@ -131,7 +129,7 @@ const Index = () => {
       toast({
         title: "Delete Error",
         description: "Failed to delete project. Please try again.",
-        variant: "destructive"
+        variant: ToastVariant.DESTRUCTIVE
       });
     } finally {
       setProjectToDelete(null);
