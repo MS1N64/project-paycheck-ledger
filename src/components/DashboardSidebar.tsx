@@ -1,7 +1,6 @@
 
 import SearchFilter from "@/components/SearchFilter";
 import PaymentReminders from "@/components/PaymentReminders";
-import DataBackup from "@/components/DataBackup";
 import TaxReporting from "@/components/TaxReporting";
 import { Project, Payment, FilterState } from "@/types";
 
@@ -20,7 +19,6 @@ const DashboardSidebar = ({ projects, allPayments, onFilterChange }: DashboardSi
         </div>
         <div className="space-y-6">
           <PaymentReminders projects={projects} />
-          <DataBackup />
         </div>
       </div>
 

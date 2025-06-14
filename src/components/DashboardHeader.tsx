@@ -1,6 +1,7 @@
 
 import { Button } from "@/components/ui/button";
-import { Plus, Cloud } from "lucide-react";
+import { Plus, Cloud, Shield } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 interface DashboardHeaderProps {
   onCreateProject: () => void;
@@ -8,6 +9,8 @@ interface DashboardHeaderProps {
 }
 
 const DashboardHeader = ({ onCreateProject, onShowCloudSync }: DashboardHeaderProps) => {
+  const navigate = useNavigate();
+
   return (
     <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
       <div>
@@ -15,6 +18,14 @@ const DashboardHeader = ({ onCreateProject, onShowCloudSync }: DashboardHeaderPr
         <p className="text-slate-600 mt-1">Manage your construction projects and payments</p>
       </div>
       <div className="flex gap-2">
+        <Button
+          onClick={() => navigate("/backup")}
+          variant="outline"
+          className="border-slate-300 text-slate-700 hover:bg-slate-100"
+        >
+          <Shield className="h-4 w-4 mr-2" />
+          Backup
+        </Button>
         {onShowCloudSync && (
           <Button
             onClick={onShowCloudSync}
