@@ -7,6 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
+import { Eye, EyeOff } from "lucide-react";
 
 interface AuthFormProps {
   onAuthSuccess: () => void;
@@ -15,10 +16,13 @@ interface AuthFormProps {
 const AuthForm = ({ onAuthSuccess }: AuthFormProps) => {
   const { toast } = useToast();
   const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [formData, setFormData] = useState({
     email: "",
     password: "",
-    confirmPassword: ""
+    confirmPassword: "",
+    fullName: ""
   });
 
   const handleSignIn = async (e: React.FormEvent) => {
@@ -61,6 +65,15 @@ const AuthForm = ({ onAuthSuccess }: AuthFormProps) => {
       return;
     }
 
+    if (formData.password.length < 6) {
+      toast({
+        title: "Password too short",
+        description: "Password must be at least 6 characters long",
+        variant: "destructive",
+      });
+      return;
+    }
+
     setLoading(true);
 
     try {
@@ -68,7 +81,10 @@ const AuthForm = ({ onAuthSuccess }: AuthFormProps) => {
         email: formData.email,
         password: formData.password,
         options: {
-          emailRedirectTo: `${window.location.origin}/`
+          emailRedirectTo: `${window.location.origin}/`,
+          data: {
+            full_name: formData.fullName || formData.email,
+          }
         }
       });
 
@@ -90,44 +106,71 @@ const AuthForm = ({ onAuthSuccess }: AuthFormProps) => {
   };
 
   return (
-    <Card className="w-full max-w-md mx-auto border-slate-200">
-      <CardHeader>
-        <CardTitle className="text-slate-800 text-center">Cloud Sync Login</CardTitle>
+    <Card className="w-full border-[#E3E8EF] bg-white shadow-lg">
+      <CardHeader className="text-center">
+        <CardTitle className="text-[#0A2C56]">Access Your Dashboard</CardTitle>
       </CardHeader>
       <CardContent>
         <Tabs defaultValue="signin" className="w-full">
-          <TabsList className="grid w-full grid-cols-2">
-            <TabsTrigger value="signin">Sign In</TabsTrigger>
-            <TabsTrigger value="signup">Sign Up</TabsTrigger>
+          <TabsList className="grid w-full grid-cols-2 bg-[#F5F7FA] border border-[#E3E8EF]">
+            <TabsTrigger 
+              value="signin"
+              className="text-[#0A2C56] data-[state=active]:bg-white data-[state=active]:border data-[state=active]:border-[#0A2C56]/20"
+            >
+              Sign In
+            </TabsTrigger>
+            <TabsTrigger 
+              value="signup"
+              className="text-[#0A2C56] data-[state=active]:bg-white data-[state=active]:border data-[state=active]:border-[#0A2C56]/20"
+            >
+              Sign Up
+            </TabsTrigger>
           </TabsList>
           
           <TabsContent value="signin">
             <form onSubmit={handleSignIn} className="space-y-4">
               <div>
-                <Label htmlFor="signin-email">Email</Label>
+                <Label htmlFor="signin-email" className="text-[#0A2C56]">Email</Label>
                 <Input
                   id="signin-email"
                   type="email"
                   value={formData.email}
                   onChange={(e) => setFormData({...formData, email: e.target.value})}
                   required
-                  className="border-slate-300 focus:border-slate-500"
+                  className="border-[#E3E8EF] focus:border-[#0A2C56] focus:ring-[#0A2C56]"
+                  placeholder="Enter your email"
                 />
               </div>
               <div>
-                <Label htmlFor="signin-password">Password</Label>
-                <Input
-                  id="signin-password"
-                  type="password"
-                  value={formData.password}
-                  onChange={(e) => setFormData({...formData, password: e.target.value})}
-                  required
-                  className="border-slate-300 focus:border-slate-500"
-                />
+                <Label htmlFor="signin-password" className="text-[#0A2C56]">Password</Label>
+                <div className="relative">
+                  <Input
+                    id="signin-password"
+                    type={showPassword ? "text" : "password"}
+                    value={formData.password}
+                    onChange={(e) => setFormData({...formData, password: e.target.value})}
+                    required
+                    className="border-[#E3E8EF] focus:border-[#0A2C56] focus:ring-[#0A2C56] pr-10"
+                    placeholder="Enter your password"
+                  />
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="sm"
+                    className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
+                    onClick={() => setShowPassword(!showPassword)}
+                  >
+                    {showPassword ? (
+                      <EyeOff className="h-4 w-4 text-[#0A2C56]/70" />
+                    ) : (
+                      <Eye className="h-4 w-4 text-[#0A2C56]/70" />
+                    )}
+                  </Button>
+                </div>
               </div>
               <Button 
                 type="submit" 
-                className="w-full bg-slate-800 hover:bg-slate-700"
+                className="w-full bg-[#0A2C56] hover:bg-[#0A2C56]/90 text-white"
                 disabled={loading}
               >
                 {loading ? "Signing in..." : "Sign In"}
@@ -138,41 +181,85 @@ const AuthForm = ({ onAuthSuccess }: AuthFormProps) => {
           <TabsContent value="signup">
             <form onSubmit={handleSignUp} className="space-y-4">
               <div>
-                <Label htmlFor="signup-email">Email</Label>
+                <Label htmlFor="signup-name" className="text-[#0A2C56]">Full Name</Label>
+                <Input
+                  id="signup-name"
+                  type="text"
+                  value={formData.fullName}
+                  onChange={(e) => setFormData({...formData, fullName: e.target.value})}
+                  className="border-[#E3E8EF] focus:border-[#0A2C56] focus:ring-[#0A2C56]"
+                  placeholder="Enter your full name"
+                />
+              </div>
+              <div>
+                <Label htmlFor="signup-email" className="text-[#0A2C56]">Email</Label>
                 <Input
                   id="signup-email"
                   type="email"
                   value={formData.email}
                   onChange={(e) => setFormData({...formData, email: e.target.value})}
                   required
-                  className="border-slate-300 focus:border-slate-500"
+                  className="border-[#E3E8EF] focus:border-[#0A2C56] focus:ring-[#0A2C56]"
+                  placeholder="Enter your email"
                 />
               </div>
               <div>
-                <Label htmlFor="signup-password">Password</Label>
-                <Input
-                  id="signup-password"
-                  type="password"
-                  value={formData.password}
-                  onChange={(e) => setFormData({...formData, password: e.target.value})}
-                  required
-                  className="border-slate-300 focus:border-slate-500"
-                />
+                <Label htmlFor="signup-password" className="text-[#0A2C56]">Password</Label>
+                <div className="relative">
+                  <Input
+                    id="signup-password"
+                    type={showPassword ? "text" : "password"}
+                    value={formData.password}
+                    onChange={(e) => setFormData({...formData, password: e.target.value})}
+                    required
+                    className="border-[#E3E8EF] focus:border-[#0A2C56] focus:ring-[#0A2C56] pr-10"
+                    placeholder="Create a password (min. 6 characters)"
+                  />
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="sm"
+                    className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
+                    onClick={() => setShowPassword(!showPassword)}
+                  >
+                    {showPassword ? (
+                      <EyeOff className="h-4 w-4 text-[#0A2C56]/70" />
+                    ) : (
+                      <Eye className="h-4 w-4 text-[#0A2C56]/70" />
+                    )}
+                  </Button>
+                </div>
               </div>
               <div>
-                <Label htmlFor="confirm-password">Confirm Password</Label>
-                <Input
-                  id="confirm-password"
-                  type="password"
-                  value={formData.confirmPassword}
-                  onChange={(e) => setFormData({...formData, confirmPassword: e.target.value})}
-                  required
-                  className="border-slate-300 focus:border-slate-500"
-                />
+                <Label htmlFor="confirm-password" className="text-[#0A2C56]">Confirm Password</Label>
+                <div className="relative">
+                  <Input
+                    id="confirm-password"
+                    type={showConfirmPassword ? "text" : "password"}
+                    value={formData.confirmPassword}
+                    onChange={(e) => setFormData({...formData, confirmPassword: e.target.value})}
+                    required
+                    className="border-[#E3E8EF] focus:border-[#0A2C56] focus:ring-[#0A2C56] pr-10"
+                    placeholder="Confirm your password"
+                  />
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="sm"
+                    className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
+                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                  >
+                    {showConfirmPassword ? (
+                      <EyeOff className="h-4 w-4 text-[#0A2C56]/70" />
+                    ) : (
+                      <Eye className="h-4 w-4 text-[#0A2C56]/70" />
+                    )}
+                  </Button>
+                </div>
               </div>
               <Button 
                 type="submit" 
-                className="w-full bg-slate-800 hover:bg-slate-700"
+                className="w-full bg-[#0A2C56] hover:bg-[#0A2C56]/90 text-white"
                 disabled={loading}
               >
                 {loading ? "Creating account..." : "Create Account"}
