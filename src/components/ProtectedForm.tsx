@@ -8,7 +8,8 @@ import { Button } from '@/components/ui/button';
 
 interface ProtectedFormProps {
   children: ReactNode;
-  onVerified: (token: string) => void; // Changed to pass token
+  onVerified: (token: string) => void;
+  onReset?: () => void;
   action?: string;
   className?: string;
 }
@@ -16,7 +17,7 @@ interface ProtectedFormProps {
 // Using your real hCaptcha site key
 const HCAPTCHA_SITE_KEY = '0732bed2-e24c-4466-8ca8-36dc71782aac';
 
-const ProtectedForm = ({ children, onVerified, action, className = '' }: ProtectedFormProps) => {
+const ProtectedForm = ({ children, onVerified, onReset, action, className = '' }: ProtectedFormProps) => {
   const [isVerified, setIsVerified] = useState(false);
   const [captchaToken, setCaptchaToken] = useState<string | null>(null);
   const [verificationError, setVerificationError] = useState<string | null>(null);
@@ -38,6 +39,11 @@ const ProtectedForm = ({ children, onVerified, action, className = '' }: Protect
     setIsVerified(false);
     setIsProcessing(false);
     setShowRateLimitWarning(false);
+    
+    // Call parent reset if provided
+    if (onReset) {
+      onReset();
+    }
   };
 
   const handleCaptchaVerify = async (token: string) => {
@@ -57,7 +63,7 @@ const ProtectedForm = ({ children, onVerified, action, className = '' }: Protect
       if (result.success) {
         console.log('Captcha verification successful');
         setIsVerified(true);
-        onVerified(token); // Pass the token to parent
+        onVerified(token);
         toast({
           title: "Verification successful",
           description: "You can now proceed with your request.",

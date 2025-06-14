@@ -11,9 +11,10 @@ import { Eye, EyeOff } from "lucide-react";
 interface AuthFormProps {
   onAuthSuccess: () => void;
   captchaToken: string | null;
+  onCaptchaReset?: () => void;
 }
 
-const AuthForm = ({ onAuthSuccess, captchaToken }: AuthFormProps) => {
+const AuthForm = ({ onAuthSuccess, captchaToken, onCaptchaReset }: AuthFormProps) => {
   const { toast } = useToast();
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
@@ -24,6 +25,30 @@ const AuthForm = ({ onAuthSuccess, captchaToken }: AuthFormProps) => {
     confirmPassword: "",
     fullName: ""
   });
+
+  const handleAuthError = (error: any) => {
+    console.error('Authentication error:', error);
+    
+    // Reset captcha on auth failure to get a new token
+    if (onCaptchaReset) {
+      setTimeout(() => {
+        onCaptchaReset();
+      }, 1500);
+    }
+    
+    let errorMessage = error.message || "An error occurred during authentication";
+    
+    // Handle specific captcha errors
+    if (error.message?.includes('captcha') || error.code === 'captcha_failed') {
+      errorMessage = "Security verification failed. Please complete the captcha again.";
+    }
+    
+    toast({
+      title: "Authentication failed",
+      description: errorMessage,
+      variant: "destructive",
+    });
+  };
 
   const handleSignIn = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -60,12 +85,7 @@ const AuthForm = ({ onAuthSuccess, captchaToken }: AuthFormProps) => {
       });
       onAuthSuccess();
     } catch (error: any) {
-      console.error('Sign in error:', error);
-      toast({
-        title: "Sign in failed",
-        description: error.message || "An error occurred during sign in",
-        variant: "destructive",
-      });
+      handleAuthError(error);
     } finally {
       setLoading(false);
     }
@@ -137,12 +157,7 @@ const AuthForm = ({ onAuthSuccess, captchaToken }: AuthFormProps) => {
         onAuthSuccess();
       }
     } catch (error: any) {
-      console.error('Sign up error:', error);
-      toast({
-        title: "Sign up failed",
-        description: error.message || "An error occurred during sign up",
-        variant: "destructive",
-      });
+      handleAuthError(error);
     } finally {
       setLoading(false);
     }

@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import AuthForm from "@/components/AuthForm";
@@ -9,6 +8,7 @@ const Auth = () => {
   const navigate = useNavigate();
   const { user, loading } = useAuth();
   const [captchaToken, setCaptchaToken] = useState<string | null>(null);
+  const [protectedFormKey, setProtectedFormKey] = useState(0);
 
   useEffect(() => {
     // Redirect authenticated users to dashboard
@@ -24,6 +24,13 @@ const Auth = () => {
   const handleCaptchaVerified = (token: string) => {
     console.log('Captcha verified with token:', token ? 'received' : 'missing');
     setCaptchaToken(token);
+  };
+
+  const handleCaptchaReset = () => {
+    console.log('Resetting captcha token');
+    setCaptchaToken(null);
+    // Force re-render of ProtectedForm to get a fresh captcha
+    setProtectedFormKey(prev => prev + 1);
   };
 
   if (loading) {
@@ -51,8 +58,18 @@ const Auth = () => {
           </p>
         </div>
         
-        <ProtectedForm onVerified={handleCaptchaVerified} action="auth" className="mb-6">
-          <AuthForm onAuthSuccess={handleAuthSuccess} captchaToken={captchaToken} />
+        <ProtectedForm 
+          key={protectedFormKey}
+          onVerified={handleCaptchaVerified} 
+          onReset={handleCaptchaReset}
+          action="auth" 
+          className="mb-6"
+        >
+          <AuthForm 
+            onAuthSuccess={handleAuthSuccess} 
+            captchaToken={captchaToken}
+            onCaptchaReset={handleCaptchaReset}
+          />
         </ProtectedForm>
         
         <div className="mt-6 text-center text-xs text-[#0A2C56]/60">
