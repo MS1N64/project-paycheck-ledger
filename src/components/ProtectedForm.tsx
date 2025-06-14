@@ -1,5 +1,5 @@
 
-import { useState, ReactNode, useRef } from 'react';
+import React, { useState, ReactNode, useRef } from 'react';
 import HCaptcha from './HCaptcha';
 import { useCaptchaVerification } from '@/hooks/useCaptchaVerification';
 import { useToast } from '@/hooks/use-toast';
