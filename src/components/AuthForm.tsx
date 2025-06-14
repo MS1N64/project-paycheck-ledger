@@ -29,18 +29,17 @@ const AuthForm = ({ onAuthSuccess, captchaToken, onCaptchaReset }: AuthFormProps
   const handleAuthError = (error: any) => {
     console.error('Authentication error:', error);
     
-    // Reset captcha on auth failure to get a new token
-    if (onCaptchaReset) {
-      setTimeout(() => {
-        onCaptchaReset();
-      }, 1500);
-    }
-    
     let errorMessage = error.message || "An error occurred during authentication";
     
     // Handle specific captcha errors
-    if (error.message?.includes('captcha') || error.code === 'captcha_failed') {
+    if (error.message?.includes('captcha') || error.code === 'captcha_failed' || error.message?.includes('already-seen-response')) {
       errorMessage = "Security verification failed. Please complete the captcha again.";
+      
+      // Reset captcha immediately for fresh token
+      if (onCaptchaReset) {
+        console.log('Calling captcha reset due to auth error');
+        onCaptchaReset();
+      }
     }
     
     toast({
@@ -65,7 +64,7 @@ const AuthForm = ({ onAuthSuccess, captchaToken, onCaptchaReset }: AuthFormProps
     setLoading(true);
 
     try {
-      console.log('Attempting sign in for:', formData.email, 'with captcha token');
+      console.log('Attempting sign in for:', formData.email, 'with fresh captcha token');
       
       const { data, error } = await supabase.auth.signInWithPassword({
         email: formData.email,
@@ -124,7 +123,7 @@ const AuthForm = ({ onAuthSuccess, captchaToken, onCaptchaReset }: AuthFormProps
     setLoading(true);
 
     try {
-      console.log('Attempting sign up for:', formData.email, 'with captcha token');
+      console.log('Attempting sign up for:', formData.email, 'with fresh captcha token');
       
       const { data, error } = await supabase.auth.signUp({
         email: formData.email,

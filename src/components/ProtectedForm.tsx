@@ -1,3 +1,4 @@
+
 import { useState, ReactNode, useRef } from 'react';
 import HCaptcha from './HCaptcha';
 import { useCaptchaVerification } from '@/hooks/useCaptchaVerification';
@@ -23,6 +24,7 @@ const ProtectedForm = ({ children, onVerified, onReset, action, className = '' }
   const [verificationError, setVerificationError] = useState<string | null>(null);
   const [showRateLimitWarning, setShowRateLimitWarning] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
+  const [captchaKey, setCaptchaKey] = useState(0); // Force re-render of captcha
   const captchaRef = useRef<HTMLDivElement>(null);
   
   const { verifyCaptcha, isVerifying } = useCaptchaVerification();
@@ -30,15 +32,16 @@ const ProtectedForm = ({ children, onVerified, onReset, action, className = '' }
 
   const resetCaptcha = () => {
     console.log('Resetting captcha form state');
-    const resetFn = (captchaRef.current as any)?.reset;
-    if (resetFn && typeof resetFn === 'function') {
-      resetFn();
-    }
+    
+    // Reset all state
     setCaptchaToken(null);
     setVerificationError(null);
     setIsVerified(false);
     setIsProcessing(false);
     setShowRateLimitWarning(false);
+    
+    // Force re-render of captcha widget with new key
+    setCaptchaKey(prev => prev + 1);
     
     // Call parent reset if provided
     if (onReset) {
@@ -120,16 +123,26 @@ const ProtectedForm = ({ children, onVerified, onReset, action, className = '' }
 
   const handleCaptchaExpire = () => {
     console.log('Captcha expired, resetting form');
-    setIsVerified(false);
-    setCaptchaToken(null);
-    setVerificationError(null);
-    setIsProcessing(false);
+    resetCaptcha();
     toast({
       title: "Verification expired",
       description: "Please complete the captcha again.",
       variant: "destructive",
     });
   };
+
+  // Expose reset function to parent components that might need it
+  const handleAuthFailure = () => {
+    console.log('Authentication failed, resetting captcha for fresh token');
+    resetCaptcha();
+  };
+
+  // Add this to the ref so parent components can call it
+  React.useEffect(() => {
+    if (captchaRef.current) {
+      (captchaRef.current as any).resetForAuthFailure = handleAuthFailure;
+    }
+  }, []);
 
   if (!isVerified) {
     return (
@@ -174,6 +187,7 @@ const ProtectedForm = ({ children, onVerified, onReset, action, className = '' }
         <div className="flex justify-center">
           <div ref={captchaRef}>
             <HCaptcha
+              key={captchaKey}
               sitekey={HCAPTCHA_SITE_KEY}
               onVerify={handleCaptchaVerify}
               onError={handleCaptchaError}
