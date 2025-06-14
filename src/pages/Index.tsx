@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import ProjectForm from "@/components/ProjectForm";
@@ -148,8 +149,8 @@ const Index = () => {
   const projectToDeleteData = projects.find(p => p.id === projectToDelete);
 
   return (
-    <div className="min-h-screen bg-slate-50">
-      <div className="container mx-auto px-4 py-8">
+    <div className="min-h-screen bg-slate-50 dark:bg-slate-900">
+      <div className="container mx-auto px-3 sm:px-4 py-4 sm:py-8">
         <DashboardHeader onCreateProject={handleShowProjectForm} />
 
         <DashboardStats projects={projects} />
@@ -160,7 +161,7 @@ const Index = () => {
         />
 
         <Dialog open={showProjectForm} onOpenChange={setShowProjectForm}>
-          <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+          <DialogContent className="max-w-4xl max-h-[95vh] w-[95vw] sm:w-full overflow-y-auto p-3 sm:p-6">
             <ProjectForm
               onSubmit={handleCreateProject}
               onCancel={() => {
@@ -173,7 +174,7 @@ const Index = () => {
         </Dialog>
 
         <AlertDialog open={!!projectToDelete} onOpenChange={() => setProjectToDelete(null)}>
-          <AlertDialogContent>
+          <AlertDialogContent className="w-[95vw] max-w-md">
             <AlertDialogHeader>
               <AlertDialogTitle>Delete Project</AlertDialogTitle>
               <AlertDialogDescription>
@@ -181,11 +182,11 @@ const Index = () => {
                 This action cannot be undone and will also remove all related payments.
               </AlertDialogDescription>
             </AlertDialogHeader>
-            <AlertDialogFooter>
-              <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogFooter className="flex-col sm:flex-row gap-2">
+              <AlertDialogCancel className="w-full sm:w-auto">Cancel</AlertDialogCancel>
               <AlertDialogAction 
                 onClick={confirmDeleteProject}
-                className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                className="w-full sm:w-auto bg-destructive text-destructive-foreground hover:bg-destructive/90"
               >
                 Delete Project
               </AlertDialogAction>

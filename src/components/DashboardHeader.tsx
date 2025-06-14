@@ -9,23 +9,25 @@ interface DashboardHeaderProps {
 
 const DashboardHeader = ({ onCreateProject }: DashboardHeaderProps) => {
   return (
-    <div className="flex justify-between items-center mb-8">
-      <div>
-        <h1 className="text-4xl font-bold text-gray-900 dark:text-gray-100 mb-2">
+    <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6 sm:mb-8">
+      <div className="w-full sm:w-auto">
+        <h1 className="text-2xl sm:text-4xl font-bold text-gray-900 dark:text-gray-100 mb-1 sm:mb-2">
           Project Dashboard
         </h1>
-        <p className="text-gray-600 dark:text-gray-400">
+        <p className="text-sm sm:text-base text-gray-600 dark:text-gray-400">
           Manage your construction projects and track payments
         </p>
       </div>
-      <div className="flex items-center gap-4">
+      <div className="flex items-center gap-2 sm:gap-4 w-full sm:w-auto justify-end">
         <DarkModeToggle />
         <Button 
           onClick={onCreateProject} 
-          className="bg-blue-600 hover:bg-blue-700 text-white"
+          className="bg-blue-600 hover:bg-blue-700 text-white text-sm sm:text-base px-3 sm:px-4 py-2 flex-1 sm:flex-none"
+          size="sm"
         >
-          <Plus className="mr-2 h-4 w-4" />
-          New Project
+          <Plus className="mr-1 sm:mr-2 h-4 w-4" />
+          <span className="hidden xs:inline">New Project</span>
+          <span className="xs:hidden">New</span>
         </Button>
       </div>
     </div>

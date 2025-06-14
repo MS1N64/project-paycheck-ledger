@@ -13,47 +13,47 @@ const DashboardStats = ({ projects }: DashboardStatsProps) => {
   const activeProjects = projects.filter(p => p.status !== "Completed").length;
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-      <Card className="border-slate-200">
-        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-          <CardTitle className="text-sm font-medium text-slate-600">Total Projects</CardTitle>
-          <Building className="h-4 w-4 text-slate-400" />
+    <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6 mb-6 sm:mb-8">
+      <Card className="border-slate-200 dark:border-slate-700">
+        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 px-3 sm:px-6 pt-3 sm:pt-6">
+          <CardTitle className="text-xs sm:text-sm font-medium text-slate-600 dark:text-slate-400">Total Projects</CardTitle>
+          <Building className="h-3 w-3 sm:h-4 sm:w-4 text-slate-400" />
         </CardHeader>
-        <CardContent>
-          <div className="text-2xl font-bold text-slate-800">{projects.length}</div>
-          <p className="text-xs text-slate-500">{activeProjects} active</p>
+        <CardContent className="px-3 sm:px-6 pb-3 sm:pb-6">
+          <div className="text-lg sm:text-2xl font-bold text-slate-800 dark:text-slate-200">{projects.length}</div>
+          <p className="text-xs text-slate-500 dark:text-slate-400">{activeProjects} active</p>
         </CardContent>
       </Card>
-      <Card className="border-slate-200">
-        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-          <CardTitle className="text-sm font-medium text-slate-600">Total Value</CardTitle>
-          <DollarSign className="h-4 w-4 text-slate-400" />
+      <Card className="border-slate-200 dark:border-slate-700">
+        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 px-3 sm:px-6 pt-3 sm:pt-6">
+          <CardTitle className="text-xs sm:text-sm font-medium text-slate-600 dark:text-slate-400">Total Value</CardTitle>
+          <DollarSign className="h-3 w-3 sm:h-4 sm:w-4 text-slate-400" />
         </CardHeader>
-        <CardContent>
-          <div className="text-2xl font-bold text-slate-800">£{totalValue.toLocaleString()}</div>
-          <p className="text-xs text-slate-500">Across all projects</p>
+        <CardContent className="px-3 sm:px-6 pb-3 sm:pb-6">
+          <div className="text-lg sm:text-2xl font-bold text-slate-800 dark:text-slate-200">£{totalValue.toLocaleString()}</div>
+          <p className="text-xs text-slate-500 dark:text-slate-400">Across all projects</p>
         </CardContent>
       </Card>
-      <Card className="border-slate-200">
-        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-          <CardTitle className="text-sm font-medium text-slate-600">Total Received</CardTitle>
-          <TrendingUp className="h-4 w-4 text-slate-400" />
+      <Card className="border-slate-200 dark:border-slate-700">
+        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 px-3 sm:px-6 pt-3 sm:pt-6">
+          <CardTitle className="text-xs sm:text-sm font-medium text-slate-600 dark:text-slate-400">Total Received</CardTitle>
+          <TrendingUp className="h-3 w-3 sm:h-4 sm:w-4 text-slate-400" />
         </CardHeader>
-        <CardContent>
-          <div className="text-2xl font-bold text-emerald-600">£{totalReceived.toLocaleString()}</div>
-          <p className="text-xs text-slate-500">
+        <CardContent className="px-3 sm:px-6 pb-3 sm:pb-6">
+          <div className="text-lg sm:text-2xl font-bold text-emerald-600 dark:text-emerald-400">£{totalReceived.toLocaleString()}</div>
+          <p className="text-xs text-slate-500 dark:text-slate-400">
             {totalValue > 0 ? Math.round((totalReceived / totalValue) * 100) : 0}% of total
           </p>
         </CardContent>
       </Card>
-      <Card className="border-slate-200">
-        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-          <CardTitle className="text-sm font-medium text-slate-600">Outstanding</CardTitle>
-          <DollarSign className="h-4 w-4 text-slate-400" />
+      <Card className="border-slate-200 dark:border-slate-700 col-span-2 lg:col-span-1">
+        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 px-3 sm:px-6 pt-3 sm:pt-6">
+          <CardTitle className="text-xs sm:text-sm font-medium text-slate-600 dark:text-slate-400">Outstanding</CardTitle>
+          <DollarSign className="h-3 w-3 sm:h-4 sm:w-4 text-slate-400" />
         </CardHeader>
-        <CardContent>
-          <div className="text-2xl font-bold text-amber-600">£{(totalValue - totalReceived).toLocaleString()}</div>
-          <p className="text-xs text-slate-500">Remaining to collect</p>
+        <CardContent className="px-3 sm:px-6 pb-3 sm:pb-6">
+          <div className="text-lg sm:text-2xl font-bold text-amber-600 dark:text-amber-400">£{(totalValue - totalReceived).toLocaleString()}</div>
+          <p className="text-xs text-slate-500 dark:text-slate-400">Remaining to collect</p>
         </CardContent>
       </Card>
     </div>
